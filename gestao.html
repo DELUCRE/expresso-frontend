@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão - Expresso Itaporanga</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .analytics-container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="gestao-container">
+    <header class="gestao-header">
+        <nav class="gestao-nav">
+            <a href="#" class="gestao-logo">
+                Expresso <span style="color: #FF8C00;">Itaporanga</span>
+            </a>
+            <ul class="gestao-menu">
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="#">Entregas</a></li>
+                <li><a href="#">Nova Entrega</a></li>
+                <li><a href="#">Relatórios</a></li>
+                <li><a href="#">Análise de Dados</a></li>
+                <li><a href="#" id="logoutButton">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="dashboard-content">
+        <div class="analytics-container">
+            <div class="analytics-header">
+                <h1>📊 Análise de Dados</h1>
+                <p>Dashboard completo com métricas, gráficos e insights sobre as operações da Expresso Itaporanga</p>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="total-entregas">-</div>
+                    <div class="metric-label">Total de Entregas</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value" id="entregas-pendentes">-</div>
+                    <div class="metric-label">Entregas Pendentes</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value" id="entregas-entregues">-</div>
+                    <div class="metric-label">Entregas Entregues</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">📈 Entregas Recentes</h3>
+                <div id="entregas-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/gestao.js"></script>
+</body>
+</html>
