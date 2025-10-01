@@ -1,0 +1,373 @@
+/* ============================================================================
+   RESPONSIVIDADE MOBILE MELHORADA - EXPRESSO ITAPORANGA
+   ============================================================================ */
+
+/* Reset e configurações base */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+/* ============================================================================
+   MENU HAMBURGER RESPONSIVO
+   ============================================================================ */
+
+.mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--azul-principal), var(--laranja-destaque));
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-menu-toggle:active {
+    transform: scale(0.95);
+}
+
+/* ============================================================================
+   LAYOUT RESPONSIVO
+   ============================================================================ */
+
+@media screen and (max-width: 768px) {
+    /* Mostrar botão hamburger */
+    .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Header ajustado para mobile */
+    .header-institucional {
+        padding: 0.5rem 0;
+    }
+    
+    .nav-container {
+        padding: 0 1rem;
+        position: relative;
+    }
+    
+    .logo {
+        font-size: 1.4rem;
+    }
+    
+    /* Menu mobile overlay */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9998;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 80px 20px 20px;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        overflow-y: auto;
+    }
+    
+    .nav-menu.active {
+        transform: translateX(0);
+    }
+    
+    .nav-menu li {
+        width: 90%;
+        max-width: 350px;
+        margin: 10px 0;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.4s ease;
+    }
+    
+    .nav-menu.active li {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Animação escalonada dos itens */
+    .nav-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+    .nav-menu.active li:nth-child(2) { transition-delay: 0.15s; }
+    .nav-menu.active li:nth-child(3) { transition-delay: 0.2s; }
+    .nav-menu.active li:nth-child(4) { transition-delay: 0.25s; }
+    .nav-menu.active li:nth-child(5) { transition-delay: 0.3s; }
+    
+    .nav-menu a {
+        display: block;
+        padding: 18px 25px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--azul-principal);
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        text-align: center;
+        width: 100%;
+    }
+    
+    .nav-menu a:hover,
+    .nav-menu a:focus,
+    .nav-menu a.active {
+        background: linear-gradient(135deg, var(--azul-principal), var(--laranja-destaque));
+        color: white;
+        border-color: var(--laranja-destaque);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 64, 128, 0.3);
+    }
+    
+    /* Botão de fechar */
+    .close-menu {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        background: var(--laranja-destaque);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .close-menu:hover {
+        background: #e67c00;
+        transform: scale(1.05);
+    }
+    
+    /* Hero section mobile */
+    .hero {
+        padding: 2rem 0;
+        text-align: center;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Seções de conteúdo */
+    .container {
+        padding: 0 1rem;
+        max-width: 100%;
+    }
+    
+    .section {
+        padding: 2rem 0;
+    }
+    
+    /* Cards responsivos */
+    .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    /* Formulários mobile */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px; /* Previne zoom no iOS */
+        border-radius: 8px;
+        border: 2px solid #e0e0e0;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+    
+    /* Tabelas responsivas */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        min-width: 600px;
+        font-size: 0.9rem;
+    }
+    
+    /* Imagens responsivas */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* Footer mobile */
+    .footer {
+        padding: 2rem 1rem;
+        text-align: center;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+
+/* ============================================================================
+   TABLET (768px - 1024px)
+   ============================================================================ */
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 0 2rem;
+    }
+    
+    .nav-container {
+        padding: 0 2rem;
+    }
+    
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+}
+
+/* ============================================================================
+   DESKTOP (1025px+)
+   ============================================================================ */
+
+@media screen and (min-width: 1025px) {
+    .mobile-menu-toggle,
+    .close-menu {
+        display: none;
+    }
+    
+    .nav-menu {
+        display: flex;
+        position: relative;
+        transform: none;
+        background: transparent;
+        backdrop-filter: none;
+        padding: 0;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    
+    .nav-menu li {
+        opacity: 1;
+        transform: none;
+        margin: 0 0.5rem;
+        width: auto;
+    }
+    
+    .nav-menu a {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        background: transparent;
+        box-shadow: none;
+        border-radius: 5px;
+        color: white;
+        width: auto;
+    }
+    
+    .nav-menu a:hover,
+    .nav-menu a.active {
+        background: var(--laranja-destaque);
+        transform: translateY(-2px);
+    }
+}
+
+/* ============================================================================
+   MELHORIAS DE PERFORMANCE E ACESSIBILIDADE
+   ============================================================================ */
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus states melhorados */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--laranja-destaque);
+    outline-offset: 2px;
+}
+
+/* Transições suaves */
+* {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Prevenção de zoom indesejado no iOS */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+select,
+textarea {
+    font-size: 16px;
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Animações reduzidas para usuários que preferem */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

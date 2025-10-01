@@ -1,0 +1,18 @@
+{
+  "name": "expresso-frontend",
+  "version": "2.0.0",
+  "description": "Frontend da Expresso Itaporanga - Sistema de Entregas",
+  "main": "public/index.html",
+  "scripts": {
+    "start": "npx --yes serve@latest public -l $PORT --cors",
+    "dev": "npx serve public -l 3000 --cors",
+    "build": "echo 'Static frontend - no build required'"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": ["expresso", "itaporanga", "entregas", "logistica"],
+  "author": "Expresso Itaporanga",
+  "license": "MIT"
+}
