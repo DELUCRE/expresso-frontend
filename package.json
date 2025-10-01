@@ -4,14 +4,17 @@
   "description": "Frontend da Expresso Itaporanga - Sistema de Gestão Logística",
   "main": "index.html",
   "scripts": {
-    "start": "python3 -m http.server $PORT",
-    "dev": "python3 -m http.server 8000",
+    "start": "serve -s . -l $PORT",
+    "dev": "serve -s . -l 8000",
     "build": "echo 'Build completed - static site ready'"
   },
   "keywords": ["logistica", "entregas", "expresso", "itaporanga"],
   "author": "DELUCRE",
   "license": "MIT",
+  "dependencies": {
+    "serve": "^14.2.1"
+  },
   "engines": {
-    "python": "3.x"
+    "node": "18.x"
   }
 }
