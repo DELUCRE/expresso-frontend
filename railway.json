@@ -5,7 +5,7 @@
     "buildCommand": "echo 'No build required for static site'"
   },
   "deploy": {
-    "startCommand": "npx --yes serve@latest -s public -l $PORT --cors",
+    "startCommand": "npx --yes serve@latest public -l $PORT --cors",
     "healthcheckPath": "/",
     "healthcheckTimeout": 30,
     "restartPolicyType": "ON_FAILURE",
