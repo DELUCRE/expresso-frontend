@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expresso Itaporanga</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header-institucional">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">
+                Expresso <span class="destaque">Itaporanga</span>
+            </a>
+            <button class="mobile-menu-toggle show-mobile" onclick="toggleMobileMenu()">☰</button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="sobre.html">Sobre Nós</a></li>
+                <li><a href="servicos.html">Serviços</a></li>
+                <li><a href="contato.html">Contato</a></li>
+                <li><a href="rastreamento.html">Rastreamento</a></li>
+                <li><a href="gestao/login.html">Gestão de Entregas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Conteúdo específico de cada página será inserido aqui -->
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Expresso Itaporanga - Todos os direitos reservados</p>
+            <p class="footer-slogan">"Servir com paixão, viver como exemplo"</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    
+    <script>
+    // Função para toggle do menu mobile com animações
+    function toggleMobileMenu() {
+        const navMenu = document.getElementById('nav-menu');
+        const menuToggle = document.querySelector('.mobile-menu-toggle');
+        
+        if (!navMenu || !menuToggle) return;
+
+        navMenu.classList.toggle('active');
+        menuToggle.classList.toggle('active');
+        
+        if (navMenu.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    }
+    
+    // Inicialização quando DOM carrega
+    document.addEventListener('DOMContentLoaded', function() {
+        const navMenu = document.getElementById('nav-menu');
+        const menuToggle = document.querySelector('.mobile-menu-toggle');
+        const navLinks = document.querySelectorAll('.nav-menu a');
+
+        if (!navMenu || !menuToggle) {
+            return;
+        }
+
+        // Fechar menu ao clicar em um link
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', function(event) {
+            if (!navMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+                navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Fechar menu com tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Ajustar menu em mudança de orientação
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                if (window.innerWidth > 768) {
+                    navMenu.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }, 100);
+        });
+
+        // Otimização para performance
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (window.innerWidth > 768) {
+                    navMenu.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }, 250);
+        });
+    });
+    </script>
+</body>
+</html>
