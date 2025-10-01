@@ -1,0 +1,23 @@
+{
+  "name": "expresso-frontend",
+  "version": "3.0.0",
+  "description": "Frontend da aplicação Expresso Itaporanga",
+  "main": "public/index.html",
+  "type": "module",
+  "scripts": {
+    "start": "serve -s public -l $PORT --cors",
+    "dev": "serve -s public -l 3000 --cors",
+    "build": "echo 'Static site - no build required'",
+    "test": "echo 'No tests specified'"
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": ["logistics", "delivery", "frontend"],
+  "author": "Expresso Itaporanga",
+  "license": "MIT"
+}
