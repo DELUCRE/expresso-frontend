@@ -1,8 +1,34 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expresso Itaporanga - Conectando o Nordeste a São Paulo</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <span class="logo-icon">🚛</span>
+                    Expresso Itaporanga
+                </a>
+                
+                <nav class="nav">
+                    <a href="/" class="nav-link">Início</a>
+                    <a href="/sobre" class="nav-link">Sobre</a>
+                    <a href="/servicos" class="nav-link">Serviços</a>
+                    <a href="/rastreamento" class="nav-link">Rastreamento</a>
+                    <a href="/contato" class="nav-link">Contato</a>
+                    <a href="/gestao/login" class="nav-link">Gestão</a>
+                </nav>
+            </div>
+        </div>
+    </header>
 
-{% block title %}Expresso Itaporanga - Conectando o Nordeste a São Paulo{% endblock %}
-
-{% block content %}
+    <main>
 <section class="hero">
     <div class="hero-content">
         <h1>Conectando o Nordeste a São Paulo com Agilidade e Confiança</h1>
@@ -100,5 +126,39 @@
         </div>
     </div>
 </section>
-{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Expresso Itaporanga</h3>
+                    <p>Conectando o Nordeste a São Paulo com agilidade e confiança.</p>
+                    <p class="slogan">Servir com paixão, viver como exemplo</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p>📞 (11) 99999-9999</p>
+                    <p>📧 contato@expressoitaporanga.com.br</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <a href="/sobre">Sobre Nós</a>
+                    <a href="/servicos">Serviços</a>
+                    <a href="/rastreamento">Rastreamento</a>
+                    <a href="/contato">Contato</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Expresso Itaporanga. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/router.js"></script>
+</body>
+</html>
 
