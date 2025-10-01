@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expresso Itaporanga - Transporte e Logística</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="logo.png" alt="Expresso Itaporanga" class="logo">
+                <span class="brand-text">Expresso Itaporanga</span>
+            </div>
+            
+            <!-- Menu Hamburger -->
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Navigation -->
+            <nav class="nav" id="nav">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link">Início</a></li>
+                    <li><a href="#servicos" class="nav-link">Serviços</a></li>
+                    <li><a href="#rastreamento" class="nav-link">Rastreamento</a></li>
+                    <li><a href="#sobre" class="nav-link">Sobre</a></li>
+                    <li><a href="#contato" class="nav-link">Contato</a></li>
+                    <li><a href="gestao.html" class="nav-link nav-admin">Gestão</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Especialistas no Sertão Nordestino</h1>
+                <p>Conectamos São Paulo à Paraíba com segurança, agilidade e confiança. Atendemos toda área do sertão, incluindo Vale do Piancó e região de São Francisco.</p>
+                <div class="hero-buttons">
+                    <a href="#rastreamento" class="btn btn-primary">Rastrear Encomenda</a>
+                    <a href="#contato" class="btn btn-secondary">Solicitar Cotação</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-graphic">
+                    <i class="fas fa-truck"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diferenciais -->
+    <section class="diferenciais">
+        <div class="container">
+            <h2>Nossos Diferenciais</h2>
+            <div class="diferenciais-grid">
+                <div class="diferencial-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Carga Assegurada</h3>
+                    <p>Nota fiscal e seguro Porto Seguro para total proteção da sua mercadoria</p>
+                </div>
+                <div class="diferencial-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Atendimento 24/7</h3>
+                    <p>Suporte personalizado para entender e atender seu negócio a qualquer hora</p>
+                </div>
+                <div class="diferencial-card">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h3>Especialistas no Sertão</h3>
+                    <p>Conhecimento profundo das rotas do sertão nordestino, Vale do Piancó e região</p>
+                </div>
+                <div class="diferencial-card">
+                    <i class="fas fa-route"></i>
+                    <h3>Logística Integrada</h3>
+                    <p>Coleta, transporte e entrega com rastreamento em tempo real</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Serviços -->
+    <section id="servicos" class="servicos">
+        <div class="container">
+            <h2>Nossos Serviços</h2>
+            <div class="servicos-grid">
+                <div class="servico-card">
+                    <i class="fas fa-shipping-fast"></i>
+                    <h3>Transporte Rodoviário</h3>
+                    <p>Transporte seguro e eficiente entre São Paulo e Paraíba</p>
+                </div>
+                <div class="servico-card">
+                    <i class="fas fa-warehouse"></i>
+                    <h3>Armazenagem</h3>
+                    <p>Depósitos seguros em Guarulhos-SP e Itaporanga-PB</p>
+                </div>
+                <div class="servico-card">
+                    <i class="fas fa-search-location"></i>
+                    <h3>Rastreamento</h3>
+                    <p>Acompanhe sua encomenda em tempo real</p>
+                </div>
+                <div class="servico-card">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Atendimento Personalizado</h3>
+                    <p>Soluções customizadas para seu negócio</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rastreamento -->
+    <section id="rastreamento" class="rastreamento">
+        <div class="container">
+            <div class="rastreamento-content">
+                <h2>Rastreie sua Encomenda</h2>
+                <p>Digite o código de rastreamento para acompanhar sua entrega</p>
+                <form class="rastreamento-form" id="rastreamentoForm">
+                    <div class="form-group">
+                        <input type="text" id="codigoRastreamento" placeholder="Digite o código de rastreamento" required>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                            Rastrear
+                        </button>
+                    </div>
+                </form>
+                <div id="resultadoRastreamento" class="resultado-rastreamento"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre -->
+    <section id="sobre" class="sobre">
+        <div class="container">
+            <div class="sobre-content">
+                <div class="sobre-text">
+                    <h2>Sobre a Expresso Itaporanga</h2>
+                    <p>Com anos de experiência no transporte rodoviário, somos especialistas em conectar São Paulo ao sertão nordestino, especialmente a região da Paraíba.</p>
+                    <p>Nossa missão é oferecer soluções logísticas eficazes, com foco na segurança, pontualidade e atendimento personalizado para cada cliente.</p>
+                    <div class="sobre-stats">
+                        <div class="stat">
+                            <h3>+1000</h3>
+                            <p>Entregas Realizadas</p>
+                        </div>
+                        <div class="stat">
+                            <h3>24/7</h3>
+                            <p>Atendimento</p>
+                        </div>
+                        <div class="stat">
+                            <h3>100%</h3>
+                            <p>Seguro</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="sobre-image">
+                    <div class="sobre-graphic">
+                        <i class="fas fa-road"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contato -->
+    <section id="contato" class="contato">
+        <div class="container">
+            <h2>Entre em Contato</h2>
+            <div class="contato-grid">
+                <div class="contato-info">
+                    <div class="contato-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <h3>WhatsApp</h3>
+                            <p>SP: (11) 94036-1071</p>
+                            <p>PB: (83) 99832-3948</p>
+                        </div>
+                    </div>
+                    <div class="contato-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h3>E-mail</h3>
+                            <p>comercial@expressoitaporanga.com.br</p>
+                        </div>
+                    </div>
+                    <div class="contato-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>Endereços</h3>
+                            <p><strong>SP:</strong> Rua Remanso, 12 - Guarulhos/SP</p>
+                            <p><strong>PB:</strong> Rod PB-372, S/N - Sítio Malhada Grande, Itaporanga/PB</p>
+                        </div>
+                    </div>
+                    <div class="contato-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h3>Horário</h3>
+                            <p>Segunda a Sexta: 08h às 17h</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contato-form">
+                    <form id="contatoForm">
+                        <div class="form-group">
+                            <input type="text" placeholder="Seu nome" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" placeholder="Seu e-mail" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" placeholder="Seu telefone" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea placeholder="Sua mensagem" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="logo.png" alt="Expresso Itaporanga" class="logo">
+                    <p>Conectando São Paulo ao Sertão Nordestino com segurança e confiança.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#servicos">Serviços</a></li>
+                        <li><a href="#rastreamento">Rastreamento</a></li>
+                        <li><a href="#contato">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h4>Redes Sociais</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Expresso Itaporanga. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

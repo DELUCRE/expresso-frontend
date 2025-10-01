@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão - Expresso Itaporanga</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Estilos específicos para gestão */
+        .gestao-container {
+            min-height: 100vh;
+            background: var(--light-bg);
+            padding-top: 80px;
+        }
+        
+        .gestao-header {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .gestao-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .gestao-subtitle {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .dashboard-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .card-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-action {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+        
+        .card-action:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        .stats-overview {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            background: var(--light-bg);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+        
+        .quick-actions {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--light-bg);
+            border: 2px solid transparent;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            border-color: var(--primary-color);
+            background: var(--white);
+        }
+        
+        .action-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .gestao-title {
+                font-size: 2rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gestao-container {
+                padding-top: 70px;
+            }
+            
+            .gestao-header {
+                padding: 1.5rem 0;
+            }
+            
+            .gestao-title {
+                font-size: 1.8rem;
+            }
+            
+            .dashboard-card {
+                padding: 1.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="static/images/logo.png" alt="Expresso Itaporanga" class="logo">
+                <span class="brand-text">Expresso Itaporanga</span>
+            </div>
+            
+            <!-- Menu Hamburger -->
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Navigation -->
+            <nav class="nav" id="nav">
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-link">Início</a></li>
+                    <li><a href="index.html#servicos" class="nav-link">Serviços</a></li>
+                    <li><a href="index.html#rastreamento" class="nav-link">Rastreamento</a></li>
+                    <li><a href="index.html#sobre" class="nav-link">Sobre</a></li>
+                    <li><a href="index.html#contato" class="nav-link">Contato</a></li>
+                    <li><a href="gestao.html" class="nav-link nav-admin">Gestão</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="gestao-container">
+        <!-- Header da Gestão -->
+        <div class="gestao-header">
+            <div class="container">
+                <h1 class="gestao-title">Sistema de Gestão</h1>
+                <p class="gestao-subtitle">Painel administrativo da Expresso Itaporanga</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Estatísticas Gerais -->
+            <div class="stats-overview">
+                <h2>Visão Geral</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">247</div>
+                        <div class="stat-label">Entregas Ativas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1,543</div>
+                        <div class="stat-label">Total Entregas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">98.5%</div>
+                        <div class="stat-label">Taxa de Sucesso</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">156</div>
+                        <div class="stat-label">Clientes Ativos</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Principal -->
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h3 class="card-title">Nova Entrega</h3>
+                    <p class="card-description">Cadastre uma nova entrega no sistema com todas as informações necessárias.</p>
+                    <a href="#" class="card-action">Cadastrar Entrega</a>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-icon">
+                        <i class="fas fa-list-alt"></i>
+                    </div>
+                    <h3 class="card-title">Gerenciar Entregas</h3>
+                    <p class="card-description">Visualize, edite e acompanhe todas as entregas em andamento.</p>
+                    <a href="#" class="card-action">Ver Entregas</a>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="card-title">Clientes</h3>
+                    <p class="card-description">Gerencie informações dos clientes e histórico de entregas.</p>
+                    <a href="#" class="card-action">Gerenciar Clientes</a>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 class="card-title">Relatórios</h3>
+                    <p class="card-description">Acesse relatórios detalhados e análises de desempenho.</p>
+                    <a href="#" class="card-action">Ver Relatórios</a>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h3 class="card-title">Rotas</h3>
+                    <p class="card-description">Planeje e otimize rotas de entrega para máxima eficiência.</p>
+                    <a href="#" class="card-action">Gerenciar Rotas</a>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3 class="card-title">Configurações</h3>
+                    <p class="card-description">Configure parâmetros do sistema e preferências.</p>
+                    <a href="#" class="card-action">Configurar</a>
+                </div>
+            </div>
+
+            <!-- Ações Rápidas -->
+            <div class="quick-actions">
+                <h2>Ações Rápidas</h2>
+                <div class="actions-grid">
+                    <a href="#" class="action-btn">
+                        <i class="fas fa-search action-icon"></i>
+                        <div>
+                            <strong>Buscar Entrega</strong>
+                            <p>Encontre rapidamente uma entrega específica</p>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="action-btn">
+                        <i class="fas fa-print action-icon"></i>
+                        <div>
+                            <strong>Imprimir Etiquetas</strong>
+                            <p>Gere etiquetas para entregas pendentes</p>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="action-btn">
+                        <i class="fas fa-bell action-icon"></i>
+                        <div>
+                            <strong>Notificações</strong>
+                            <p>Veja alertas e notificações importantes</p>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="action-btn">
+                        <i class="fas fa-download action-icon"></i>
+                        <div>
+                            <strong>Exportar Dados</strong>
+                            <p>Baixe relatórios em Excel ou PDF</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/main.js"></script>
+    <script>
+        // Funcionalidades específicas da gestão
+        document.addEventListener('DOMContentLoaded', function() {
+            // Atualizar estatísticas em tempo real (simulado)
+            setInterval(atualizarEstatisticas, 30000); // A cada 30 segundos
+            
+            // Adicionar eventos aos cards
+            const dashboardCards = document.querySelectorAll('.dashboard-card');
+            dashboardCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('card-action')) {
+                        e.preventDefault();
+                        const action = e.target.textContent;
+                        alert(`Funcionalidade "${action}" será implementada em breve!`);
+                    }
+                });
+            });
+            
+            // Adicionar eventos às ações rápidas
+            const actionBtns = document.querySelectorAll('.action-btn');
+            actionBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const action = this.querySelector('strong').textContent;
+                    alert(`Funcionalidade "${action}" será implementada em breve!`);
+                });
+            });
+        });
+        
+        function atualizarEstatisticas() {
+            // Simular atualização das estatísticas
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const currentValue = parseInt(stat.textContent.replace(/[^\d]/g, ''));
+                const variation = Math.floor(Math.random() * 10) - 5; // -5 a +5
+                const newValue = Math.max(0, currentValue + variation);
+                
+                if (stat.textContent.includes('%')) {
+                    stat.textContent = Math.min(100, newValue) + '%';
+                } else {
+                    stat.textContent = newValue.toLocaleString();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
