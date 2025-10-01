@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastreamento - Expresso Itaporanga</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="fas fa-truck"></i> Expresso Itaporanga</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="rastreamento.html">Rastreamento</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contato.html">Contato</a></li>
+                    <li class="nav-item"><a class="nav-link" href="gestao/login.html">Gestão</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h1 class="text-center mb-5">Rastreamento de Entregas</h1>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-search text-primary fa-3x mb-3"></i>
+                            <h3>Acompanhe sua Entrega</h3>
+                            <p class="text-muted">Digite o código de rastreamento para ver o status da sua encomenda</p>
+                        </div>
+                        
+                        <form id="trackingForm">
+                            <div class="mb-3">
+                                <label for="trackingCode" class="form-label">Código de Rastreamento</label>
+                                <input type="text" class="form-control form-control-lg" id="trackingCode" 
+                                       placeholder="Ex: EI123456789BR" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-search me-2"></i>Rastrear Entrega
+                            </button>
+                        </form>
+                        
+                        <div id="trackingResult" class="mt-4" style="display: none;">
+                            <div class="alert alert-info">
+                                <h5><i class="fas fa-info-circle me-2"></i>Status da Entrega</h5>
+                                <div id="trackingDetails"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-question-circle text-primary me-2"></i>Como Rastrear?</h5>
+                        <ol>
+                            <li>Digite o código de rastreamento no campo acima</li>
+                            <li>Clique em "Rastrear Entrega"</li>
+                            <li>Veja o status atual e histórico da sua encomenda</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-phone text-primary me-2"></i>Precisa de Ajuda?</h5>
+                        <p>Entre em contato conosco:</p>
+                        <p><strong>SP:</strong> (11) 94036-1071</p>
+                        <p><strong>PB:</strong> (83) 99832-3948</p>
+                        <a href="contato.html" class="btn btn-outline-primary">Fale Conosco</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p>&copy; 2024 Expresso Itaporanga - Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('trackingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const code = document.getElementById('trackingCode').value;
+            const result = document.getElementById('trackingResult');
+            const details = document.getElementById('trackingDetails');
+            
+            // Simular consulta
+            details.innerHTML = `
+                <p><strong>Código:</strong> ${code}</p>
+                <p><strong>Status:</strong> Em trânsito</p>
+                <p><strong>Origem:</strong> Itaporanga - PB</p>
+                <p><strong>Destino:</strong> São Paulo - SP</p>
+                <p><strong>Última atualização:</strong> ${new Date().toLocaleString()}</p>
+            `;
+            result.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
