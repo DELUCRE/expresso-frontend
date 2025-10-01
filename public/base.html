@@ -3,43 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expresso Itaporanga</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>{% block title %}Expresso Itaporanga{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
+    {% block header %}
     <header class="header-institucional">
         <nav class="nav-container">
-            <a href="index.html" class="logo">
+            <a href="{{ url_for('index') }}" class="logo">
                 Expresso <span class="destaque">Itaporanga</span>
             </a>
             <button class="mobile-menu-toggle show-mobile" onclick="toggleMobileMenu()">☰</button>
             <ul class="nav-menu" id="nav-menu">
-                <li><a href="index.html">Início</a></li>
-                <li><a href="sobre.html">Sobre Nós</a></li>
-                <li><a href="servicos.html">Serviços</a></li>
-                <li><a href="contato.html">Contato</a></li>
-                <li><a href="rastreamento.html">Rastreamento</a></li>
-                <li><a href="gestao/login.html">Gestão de Entregas</a></li>
+                <li><a href="{{ url_for('index') }}" {% if request.endpoint == 'index' %}class="active"{% endif %}>Início</a></li>
+                <li><a href="{{ url_for('sobre') }}" {% if request.endpoint == 'sobre' %}class="active"{% endif %}>Sobre Nós</a></li>
+                <li><a href="{{ url_for('servicos') }}" {% if request.endpoint == 'servicos' %}class="active"{% endif %}>Serviços</a></li>
+                <li><a href="{{ url_for('contato') }}" {% if request.endpoint == 'contato' %}class="active"{% endif %}>Contato</a></li>
+                <li><a href="{{ url_for('gestao_login') }}" {% if 'gestao' in request.endpoint %}class="active"{% endif %}>Gestão de Entregas</a></li>
             </ul>
         </nav>
     </header>
+    {% endblock %}
 
     <main>
-        <!-- Conteúdo específico de cada página será inserido aqui -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container" style="padding-top: 1rem;">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'success' if category == 'success' else 'error' }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
     </main>
 
+    {% block footer %}
     <footer class="footer">
         <div class="container">
             <p>&copy; 2024 Expresso Itaporanga - Todos os direitos reservados</p>
             <p class="footer-slogan">"Servir com paixão, viver como exemplo"</p>
         </div>
     </footer>
+    {% endblock %}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/main.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
     
     <script>
     // Função para toggle do menu mobile com animações
@@ -47,11 +61,12 @@
         const navMenu = document.getElementById('nav-menu');
         const menuToggle = document.querySelector('.mobile-menu-toggle');
         
-        if (!navMenu || !menuToggle) return;
+        if (!navMenu || !menuToggle) return; // proteção contra erro
 
         navMenu.classList.toggle('active');
         menuToggle.classList.toggle('active');
         
+        // Prevenir scroll do body quando menu está aberto
         if (navMenu.classList.contains('active')) {
             document.body.style.overflow = 'hidden';
         } else {
@@ -66,7 +81,7 @@
         const navLinks = document.querySelectorAll('.nav-menu a');
 
         if (!navMenu || !menuToggle) {
-            return;
+            return; // se a página não tem esses elementos, não roda
         }
 
         // Fechar menu ao clicar em um link

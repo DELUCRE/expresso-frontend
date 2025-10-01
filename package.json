@@ -2,11 +2,14 @@
   "name": "expresso-frontend",
   "version": "2.0.0",
   "description": "Frontend da Expresso Itaporanga - Sistema de Entregas",
-  "main": "public/index.html",
+  "main": "server.js",
   "scripts": {
-    "start": "npx --yes serve@latest public -l $PORT --cors --single",
-    "dev": "npx serve public -l 3000 --cors",
+    "start": "node server.js",
+    "dev": "node server.js",
     "build": "echo 'Static frontend - no build required'"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   },
   "engines": {
     "node": ">=18.0.0",
