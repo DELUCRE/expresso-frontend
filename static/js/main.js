@@ -1,394 +1,315 @@
-// JavaScript principal da Expresso Itaporanga
-// Funcionalidades de interatividade e acessibilidade
-
+// Menu Hamburger
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar funcionalidades
-    initializeFormValidation();
-    initializeMenuInteraction();
-    initializeAccessibilityFeatures();
-    initializeAnimations();
-    initializeContactForm();
+    const menuToggle = document.getElementById('menuToggle');
+    const nav = document.getElementById('nav');
+    
+    if (menuToggle && nav) {
+        menuToggle.addEventListener('click', function() {
+            menuToggle.classList.toggle('active');
+            nav.classList.toggle('active');
+        });
+        
+        // Fechar menu ao clicar em um link
+        const navLinks = nav.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                nav.classList.remove('active');
+            });
+        });
+        
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', function(e) {
+            if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
+                menuToggle.classList.remove('active');
+                nav.classList.remove('active');
+            }
+        });
+    }
 });
 
-// Validação de formulários em tempo real
-function initializeFormValidation() {
-    const forms = document.querySelectorAll('form');
-    
-    forms.forEach(form => {
-        const inputs = form.querySelectorAll('input, select, textarea');
-        
-        inputs.forEach(input => {
-            input.addEventListener('blur', function() {
-                validateField(this);
-            });
+// Smooth scroll para links internos
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            const headerHeight = document.querySelector('.header').offsetHeight;
+            const targetPosition = target.offsetTop - headerHeight;
             
-            input.addEventListener('input', function() {
-                clearFieldError(this);
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
             });
-        });
-        
-        form.addEventListener('submit', function(e) {
-            if (!validateForm(this)) {
-                e.preventDefault();
-                showFormError('Por favor, corrija os erros antes de enviar.');
-            }
-        });
-    });
-}
-
-// Validar campo individual
-function validateField(field) {
-    const value = field.value.trim();
-    const fieldType = field.type;
-    const isRequired = field.hasAttribute('required');
-    
-    // Limpar erros anteriores
-    clearFieldError(field);
-    
-    // Validar campo obrigatório
-    if (isRequired && !value) {
-        showFieldError(field, 'Este campo é obrigatório.');
-        return false;
-    }
-    
-    // Validações específicas por tipo
-    switch (fieldType) {
-        case 'email':
-            if (value && !isValidEmail(value)) {
-                showFieldError(field, 'Por favor, insira um email válido.');
-                return false;
-            }
-            break;
-            
-        case 'tel':
-            if (value && !isValidPhone(value)) {
-                showFieldError(field, 'Por favor, insira um telefone válido.');
-                return false;
-            }
-            break;
-    }
-    
-    return true;
-}
-
-// Validar formulário completo
-function validateForm(form) {
-    const fields = form.querySelectorAll('input[required], select[required], textarea[required]');
-    let isValid = true;
-    
-    fields.forEach(field => {
-        if (!validateField(field)) {
-            isValid = false;
         }
     });
-    
-    return isValid;
-}
+});
 
-// Mostrar erro no campo
-function showFieldError(field, message) {
-    field.classList.add('error');
-    field.setAttribute('aria-invalid', 'true');
+// Rastreamento
+document.addEventListener('DOMContentLoaded', function() {
+    const rastreamentoForm = document.getElementById('rastreamentoForm');
+    const resultadoDiv = document.getElementById('resultadoRastreamento');
     
-    // Remover mensagem de erro anterior
-    const existingError = field.parentNode.querySelector('.error-message');
-    if (existingError) {
-        existingError.remove();
-    }
-    
-    // Adicionar nova mensagem de erro
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.textContent = message;
-    errorDiv.setAttribute('role', 'alert');
-    errorDiv.setAttribute('aria-live', 'polite');
-    
-    field.parentNode.appendChild(errorDiv);
-}
-
-// Limpar erro do campo
-function clearFieldError(field) {
-    field.classList.remove('error');
-    field.removeAttribute('aria-invalid');
-    
-    const errorMessage = field.parentNode.querySelector('.error-message');
-    if (errorMessage) {
-        errorMessage.remove();
-    }
-}
-
-// Mostrar erro geral do formulário
-function showFormError(message) {
-    const alertDiv = document.createElement('div');
-    alertDiv.className = 'alert alert-error';
-    alertDiv.textContent = message;
-    alertDiv.setAttribute('role', 'alert');
-    alertDiv.setAttribute('aria-live', 'assertive');
-    
-    // Inserir no topo da página
-    const main = document.querySelector('main');
-    main.insertBefore(alertDiv, main.firstChild);
-    
-    // Remover após 5 segundos
-    setTimeout(() => {
-        alertDiv.remove();
-    }, 5000);
-    
-    // Focar no primeiro campo com erro
-    const firstError = document.querySelector('.error');
-    if (firstError) {
-        firstError.focus();
-    }
-}
-
-// Validar email
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Validar telefone
-function isValidPhone(phone) {
-    const phoneRegex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
-    return phoneRegex.test(phone);
-}
-
-// Interação do menu de navegação
-function initializeMenuInteraction() {
-    const menuItems = document.querySelectorAll('.nav-menu a');
-    
-    menuItems.forEach(item => {
-        item.addEventListener('focus', function() {
-            this.classList.add('focused');
+    if (rastreamentoForm) {
+        rastreamentoForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const codigo = document.getElementById('codigoRastreamento').value.trim();
+            
+            if (!codigo) {
+                alert('Por favor, digite um código de rastreamento.');
+                return;
+            }
+            
+            // Simular busca (substituir pela API real)
+            buscarRastreamento(codigo);
         });
+    }
+    
+    function buscarRastreamento(codigo) {
+        // Mostrar loading
+        if (resultadoDiv) {
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.innerHTML = `
+                <div class="loading-container">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Buscando informações...</p>
+                </div>
+            `;
+        }
         
-        item.addEventListener('blur', function() {
-            this.classList.remove('focused');
+        // Simular delay da API
+        setTimeout(() => {
+            // Dados simulados (substituir pela API real)
+            const dadosSimulados = {
+                codigo: codigo,
+                status: 'Em Trânsito',
+                origem: 'Guarulhos, SP',
+                destino: 'Itaporanga, PB',
+                dataEnvio: '15/10/2024',
+                previsaoEntrega: '18/10/2024',
+                historico: [
+                    { data: '15/10/2024 09:00', evento: 'Objeto postado', local: 'Guarulhos, SP' },
+                    { data: '15/10/2024 14:30', evento: 'Objeto em trânsito', local: 'São Paulo, SP' },
+                    { data: '16/10/2024 08:15', evento: 'Objeto em trânsito', local: 'Feira de Santana, BA' },
+                    { data: '17/10/2024 10:45', evento: 'Objeto chegou ao destino', local: 'Itaporanga, PB' }
+                ]
+            };
+            
+            mostrarResultadoRastreamento(dadosSimulados);
+        }, 1500);
+    }
+    
+    function mostrarResultadoRastreamento(dados) {
+        if (!resultadoDiv) return;
+        
+        const statusClass = dados.status.toLowerCase().replace(/\s+/g, '-');
+        
+        resultadoDiv.innerHTML = `
+            <div class="rastreamento-resultado">
+                <div class="resultado-header">
+                    <h3>Código: ${dados.codigo}</h3>
+                    <span class="status-badge status-${statusClass}">${dados.status}</span>
+                </div>
+                
+                <div class="resultado-info">
+                    <div class="info-item">
+                        <strong>Origem:</strong> ${dados.origem}
+                    </div>
+                    <div class="info-item">
+                        <strong>Destino:</strong> ${dados.destino}
+                    </div>
+                    <div class="info-item">
+                        <strong>Data de Envio:</strong> ${dados.dataEnvio}
+                    </div>
+                    <div class="info-item">
+                        <strong>Previsão de Entrega:</strong> ${dados.previsaoEntrega}
+                    </div>
+                </div>
+                
+                <div class="historico">
+                    <h4>Histórico de Movimentação</h4>
+                    <div class="historico-lista">
+                        ${dados.historico.map(item => `
+                            <div class="historico-item">
+                                <div class="historico-data">${item.data}</div>
+                                <div class="historico-evento">${item.evento}</div>
+                                <div class="historico-local">${item.local}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+});
+
+// Formulário de contato
+document.addEventListener('DOMContentLoaded', function() {
+    const contatoForm = document.getElementById('contatoForm');
+    
+    if (contatoForm) {
+        contatoForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Coletar dados do formulário
+            const formData = new FormData(contatoForm);
+            const dados = Object.fromEntries(formData);
+            
+            // Validar campos
+            if (!validarFormulario(dados)) {
+                return;
+            }
+            
+            // Simular envio
+            enviarContato(dados);
         });
+    }
+    
+    function validarFormulario(dados) {
+        const campos = contatoForm.querySelectorAll('input[required], textarea[required]');
+        let valido = true;
         
-        item.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                this.click();
+        campos.forEach(campo => {
+            if (!campo.value.trim()) {
+                campo.style.borderColor = '#dc3545';
+                valido = false;
+            } else {
+                campo.style.borderColor = '#ddd';
             }
         });
+        
+        return valido;
+    }
+    
+    function enviarContato(dados) {
+        const submitBtn = contatoForm.querySelector('button[type="submit"]');
+        const textoOriginal = submitBtn.textContent;
+        
+        // Mostrar loading
+        submitBtn.textContent = 'Enviando...';
+        submitBtn.disabled = true;
+        
+        // Simular envio
+        setTimeout(() => {
+            alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+            contatoForm.reset();
+            
+            // Restaurar botão
+            submitBtn.textContent = textoOriginal;
+            submitBtn.disabled = false;
+        }, 2000);
+    }
+});
+
+// Animações ao scroll
+function animateOnScroll() {
+    const elements = document.querySelectorAll('.diferencial-card, .servico-card');
+    
+    elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < window.innerHeight - elementVisible) {
+            element.classList.add('animate-in');
+        }
     });
 }
 
-// Recursos de acessibilidade
-function initializeAccessibilityFeatures() {
-    // Adicionar skip link
-    addSkipLink();
-    
-    // Melhorar navegação por teclado
-    improveKeyboardNavigation();
-    
-    // Adicionar indicadores de foco visíveis
-    addFocusIndicators();
-    
-    // Configurar ARIA labels
-    setupAriaLabels();
+window.addEventListener('scroll', animateOnScroll);
+window.addEventListener('load', animateOnScroll);
+
+// Header scroll effect
+window.addEventListener('scroll', function() {
+    const header = document.querySelector('.header');
+    if (window.scrollY > 100) {
+        header.style.background = 'rgba(255, 255, 255, 0.95)';
+        header.style.backdropFilter = 'blur(10px)';
+    } else {
+        header.style.background = '#ffffff';
+        header.style.backdropFilter = 'none';
+    }
+});
+
+// Utilitários
+function formatarTelefone(telefone) {
+    return telefone.replace(/\D/g, '')
+                  .replace(/(\d{2})(\d)/, '($1) $2')
+                  .replace(/(\d{4})(\d)/, '$1-$2')
+                  .replace(/(\d{4})-(\d)(\d{4})/, '$1$2-$3');
 }
 
-// Adicionar link para pular para conteúdo principal
-function addSkipLink() {
+function formatarCEP(cep) {
+    return cep.replace(/\D/g, '')
+              .replace(/(\d{5})(\d)/, '$1-$2');
+}
+
+// Aplicar máscaras aos campos
+document.addEventListener('DOMContentLoaded', function() {
+    const telefoneInputs = document.querySelectorAll('input[type="tel"]');
+    telefoneInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            this.value = formatarTelefone(this.value);
+        });
+    });
+});
+
+// WhatsApp Integration
+function abrirWhatsApp(numero, mensagem = '') {
+    const url = `https://wa.me/55${numero.replace(/\D/g, '')}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, '_blank');
+}
+
+// Adicionar botões de WhatsApp
+document.addEventListener('DOMContentLoaded', function() {
+    const whatsappLinks = document.querySelectorAll('.social-links a[href*="wa.me"]');
+    whatsappLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const mensagem = 'Olá! Gostaria de solicitar uma cotação de transporte.';
+            const numero = this.href.match(/\d+/)[0];
+            abrirWhatsApp(numero, mensagem);
+        });
+    });
+});
+
+// Accessibility improvements
+document.addEventListener('DOMContentLoaded', function() {
+    // Skip link
     const skipLink = document.createElement('a');
     skipLink.href = '#main-content';
     skipLink.textContent = 'Pular para o conteúdo principal';
     skipLink.className = 'skip-link';
-    skipLink.setAttribute('aria-label', 'Pular navegação e ir direto para o conteúdo');
-    
     document.body.insertBefore(skipLink, document.body.firstChild);
     
-    // Adicionar ID ao conteúdo principal se não existir
-    const main = document.querySelector('main');
-    if (main && !main.id) {
-        main.id = 'main-content';
-    }
-}
-
-// Melhorar navegação por teclado
-function improveKeyboardNavigation() {
-    // Tornar elementos interativos focáveis
-    const interactiveElements = document.querySelectorAll('.feature-card, .value-card, .stat-card');
-    
-    interactiveElements.forEach(element => {
-        if (!element.hasAttribute('tabindex')) {
-            element.setAttribute('tabindex', '0');
-        }
-        
-        element.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                // Simular clique se houver link dentro do elemento
-                const link = this.querySelector('a');
-                if (link) {
-                    link.click();
-                }
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const menuToggle = document.getElementById('menuToggle');
+            const nav = document.getElementById('nav');
+            
+            if (nav && nav.classList.contains('active')) {
+                menuToggle.classList.remove('active');
+                nav.classList.remove('active');
             }
-        });
-    });
-}
-
-// Adicionar indicadores de foco visíveis
-function addFocusIndicators() {
-    const focusableElements = document.querySelectorAll('a, button, input, select, textarea, [tabindex]');
-    
-    focusableElements.forEach(element => {
-        element.addEventListener('focus', function() {
-            this.classList.add('keyboard-focus');
-        });
-        
-        element.addEventListener('blur', function() {
-            this.classList.remove('keyboard-focus');
-        });
-        
-        element.addEventListener('mousedown', function() {
-            this.classList.add('mouse-focus');
-        });
-        
-        element.addEventListener('mouseup', function() {
-            this.classList.remove('mouse-focus');
-        });
-    });
-}
-
-// Configurar ARIA labels
-function setupAriaLabels() {
-    // Adicionar labels aos ícones
-    const icons = document.querySelectorAll('.feature-icon, .value-icon');
-    icons.forEach(icon => {
-        if (!icon.getAttribute('aria-label')) {
-            icon.setAttribute('aria-hidden', 'true');
         }
     });
-    
-    // Melhorar formulários
-    const formGroups = document.querySelectorAll('.form-group');
-    formGroups.forEach(group => {
-        const label = group.querySelector('label');
-        const input = group.querySelector('input, select, textarea');
-        
-        if (label && input && !input.getAttribute('aria-describedby')) {
-            const labelId = 'label-' + Math.random().toString(36).substr(2, 9);
-            label.id = labelId;
-            input.setAttribute('aria-labelledby', labelId);
-        }
-    });
-}
+});
 
-// Animações suaves
-function initializeAnimations() {
-    // Animação de entrada para elementos
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+// Performance optimization
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
     };
-    
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-    
-    // Observar elementos para animação
-    const animatedElements = document.querySelectorAll('.feature-card, .value-card, .section-title');
-    animatedElements.forEach(element => {
-        element.classList.add('animate-ready');
-        observer.observe(element);
-    });
 }
 
-// Funcionalidades específicas do formulário de contato
-function initializeContactForm() {
-    const contactForm = document.querySelector('#contact-form');
-    if (!contactForm) return;
-    
-    // Máscara para telefone
-    const phoneInput = contactForm.querySelector('input[type="tel"]');
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function() {
-            this.value = formatPhone(this.value);
-        });
-    }
-    
-    // Envio AJAX do formulário
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (validateForm(this)) {
-            submitContactForm(this);
-        }
-    });
-}
-
-// Formatar telefone
-function formatPhone(phone) {
-    // Remove tudo que não é dígito
-    phone = phone.replace(/\D/g, '');
-    
-    // Aplica a máscara
-    if (phone.length <= 10) {
-        phone = phone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
-    } else {
-        phone = phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-    }
-    
-    return phone;
-}
-
-// Enviar formulário de contato via AJAX
-function submitContactForm(form) {
-    const formData = new FormData(form);
-    const submitButton = form.querySelector('button[type="submit"]');
-    
-    // Desabilitar botão durante envio
-    submitButton.disabled = true;
-    submitButton.textContent = 'Enviando...';
-    
-    fetch(form.action, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showSuccessMessage('Mensagem enviada com sucesso! Entraremos em contato em breve.');
-            form.reset();
-        } else {
-            showFormError(data.message || 'Erro ao enviar mensagem. Tente novamente.');
-        }
-    })
-    .catch(error => {
-        console.error('Erro:', error);
-        showFormError('Erro ao enviar mensagem. Verifique sua conexão e tente novamente.');
-    })
-    .finally(() => {
-        // Reabilitar botão
-        submitButton.disabled = false;
-        submitButton.textContent = 'Enviar Mensagem';
-    });
-}
-
-// Mostrar mensagem de sucesso
-function showSuccessMessage(message) {
-    const alertDiv = document.createElement('div');
-    alertDiv.className = 'alert alert-success';
-    alertDiv.textContent = message;
-    alertDiv.setAttribute('role', 'alert');
-    alertDiv.setAttribute('aria-live', 'polite');
-    
-    const main = document.querySelector('main');
-    main.insertBefore(alertDiv, main.firstChild);
-    
-    // Remover após 5 segundos
-    setTimeout(() => {
-        alertDiv.remove();
-    }, 5000);
-    
-    // Scroll para o topo
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+// Aplicar debounce ao scroll
+const debouncedAnimateOnScroll = debounce(animateOnScroll, 10);
+window.removeEventListener('scroll', animateOnScroll);
+window.addEventListener('scroll', debouncedAnimateOnScroll);
