@@ -1,0 +1,23 @@
+{
+  "public": ".",
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/sobre", "destination": "/sobre.html" },
+    { "source": "/servicos", "destination": "/servicos.html" },
+    { "source": "/rastreamento", "destination": "/rastreamento.html" },
+    { "source": "/contato", "destination": "/contato.html" },
+    { "source": "/gestao/login", "destination": "/gestao/login.html" },
+    { "source": "/gestao/dashboard", "destination": "/gestao/dashboard.html" }
+  ],
+  "headers": [
+    {
+      "source": "**/*.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300"
+        }
+      ]
+    }
+  ]
+}

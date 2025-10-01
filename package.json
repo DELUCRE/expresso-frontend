@@ -1,22 +1,18 @@
 {
   "name": "expresso-frontend",
-  "version": "3.0.1",
-  "description": "Frontend da aplicação Expresso Itaporanga - CORRIGIDO",
+  "version": "2.0.0",
+  "description": "Frontend da Expresso Itaporanga - Sistema de Entregas",
   "main": "public/index.html",
-  "type": "module",
   "scripts": {
-    "start": "npx --yes serve@latest -s public -l $PORT --cors",
-    "dev": "npx --yes serve@latest -s public -l 3000 --cors",
-    "build": "echo 'Static site - no build required'",
-    "test": "echo 'No tests specified'"
+    "start": "npx --yes serve@latest public -l $PORT --cors --single",
+    "dev": "npx serve public -l 3000 --cors",
+    "build": "echo 'Static frontend - no build required'"
   },
-  "dependencies": {},
-  "devDependencies": {},
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
-  "keywords": ["logistica", "delivery", "frontend"],
+  "keywords": ["expresso", "itaporanga", "entregas", "logistica"],
   "author": "Expresso Itaporanga",
   "license": "MIT"
 }
