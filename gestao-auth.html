@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão - Expresso Itaporanga</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="static/images/logo.png" alt="Expresso Itaporanga" class="logo">
+                <span class="brand-text">Expresso Itaporanga</span>
+            </div>
+            
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-link">Início</a></li>
+                    <li><a href="#" class="nav-link" onclick="logout()">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Sistema de Gestão -->
+    <section class="gestao-hero">
+        <div class="container">
+            <h1>Sistema de Gestão</h1>
+            <p>Painel administrativo da Expresso Itaporanga</p>
+        </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section class="dashboard">
+        <div class="container">
+            <h2>Visão Geral</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">247</div>
+                    <div class="stat-label">Entregas Ativas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1,543</div>
+                    <div class="stat-label">Total Entregas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">98.5%</div>
+                    <div class="stat-label">Taxa de Sucesso</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">Clientes Ativos</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ações Rápidas -->
+    <section class="acoes-rapidas">
+        <div class="container">
+            <div class="acoes-grid">
+                <div class="acao-card">
+                    <i class="fas fa-plus"></i>
+                    <h3>Nova Entrega</h3>
+                    <p>Cadastre uma nova entrega no sistema com todas as informações necessárias.</p>
+                    <button class="btn btn-primary">Cadastrar Entrega</button>
+                </div>
+                <div class="acao-card">
+                    <i class="fas fa-list"></i>
+                    <h3>Gerenciar Entregas</h3>
+                    <p>Visualize, edite e acompanhe todas as entregas em andamento.</p>
+                    <button class="btn btn-primary">Ver Entregas</button>
+                </div>
+                <div class="acao-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Clientes</h3>
+                    <p>Gerencie informações dos clientes e histórico de entregas.</p>
+                    <button class="btn btn-primary">Gerenciar Clientes</button>
+                </div>
+                <div class="acao-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Relatórios</h3>
+                    <p>Acesse relatórios detalhados e análises de desempenho.</p>
+                    <button class="btn btn-primary">Ver Relatórios</button>
+                </div>
+                <div class="acao-card">
+                    <i class="fas fa-route"></i>
+                    <h3>Rotas</h3>
+                    <p>Planeje e otimize rotas de entrega para máxima eficiência.</p>
+                    <button class="btn btn-primary">Gerenciar Rotas</button>
+                </div>
+                <div class="acao-card">
+                    <i class="fas fa-cog"></i>
+                    <h3>Configurações</h3>
+                    <p>Configure parâmetros do sistema e preferências.</p>
+                    <button class="btn btn-primary">Configurar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+        });
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema de Gestão | Expresso Itaporanga</title>
+    <link rel="stylesheet" href="static/css/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="static/images/logo.png" alt="Expresso Itaporanga" class="login-logo">
+                <h1>Sistema de Gestão</h1>
+                <p>Acesse sua conta para gerenciar entregas</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i>
+                        Usuário
+                    </label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                        Senha
+                    </label>
+                    <input type="password" id="password" name="password" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <i class="fas fa-eye" id="toggleIcon"></i>
+                    </button>
+                </div>
+                
+                <div class="form-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="remember">
+                        <span class="checkmark"></span>
+                        Lembrar-me
+                    </label>
+                    <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Entrar
+                </button>
+                
+                <div id="loginMessage" class="login-message"></div>
+            </form>
+            
+            <div class="login-footer">
+                <p>&copy; 2024 Expresso Itaporanga. Todos os direitos reservados.</p>
+                <div class="login-links">
+                    <a href="index.html">
+                        <i class="fas fa-home"></i>
+                        Voltar ao Site
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-background">
+            <div class="background-overlay"></div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('loginMessage');
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.login-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+            submitBtn.disabled = true;
+            
+            try {
+                // For demo purposes, accept admin/admin123
+                if (username === 'admin' && password === 'admin123') {
+                    localStorage.setItem('authToken', 'demo-token-123');
+                    messageDiv.innerHTML = '<div class="success-message"><i class="fas fa-check-circle"></i> Login realizado com sucesso!</div>';
+                    
+                    // Redirect to dashboard after 1 second
+                    setTimeout(() => {
+                        window.location.href = 'gestao-auth.html';
+                    }, 1000);
+                } else {
+                    throw new Error('Credenciais inválidas');
+                }
+            } catch (error) {
+                messageDiv.innerHTML = '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Usuário ou senha inválidos</div>';
+            } finally {
+                // Reset button state
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Check if user is already logged in
+        if (localStorage.getItem('authToken')) {
+            window.location.href = 'gestao-auth.html';
+        }
+    </script>
+</body>
+</html>
