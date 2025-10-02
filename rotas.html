@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Rotas - Sistema de Gestão | Expresso Itaporanga</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .rotas-container {
+            min-height: 100vh;
+            background: var(--light-bg);
+            padding-top: 100px;
+            padding-bottom: 2rem;
+        }
+        
+        .page-header {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+        
+        .search-box {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .btn-nova-rota {
+            background: var(--accent-color);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .rotas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .rota-card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .rota-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .rota-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .rota-nome {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .rota-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-ativa {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-inativa {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-manutencao {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .rota-info {
+            margin-bottom: 1rem;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+        
+        .info-icon {
+            color: var(--accent-color);
+            width: 16px;
+        }
+        
+        .rota-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e1e5e9;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .rota-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-action {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        
+        .btn-editar {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .btn-otimizar {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .btn-excluir {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        
+        .modal-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #000;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            color: var(--text-color);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .btn-salvar {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .actions-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .rotas-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="static/images/logo-oficial.png" alt="Expresso Itaporanga" class="logo">
+                <span class="brand-text">Expresso Itaporanga</span>
+            </div>
+            
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="gestao-auth.html" class="nav-link">Voltar</a></li>
+                    <li><a href="#" class="nav-link" onclick="logout()">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="rotas-container">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Gerenciar Rotas</h1>
+                <p class="page-subtitle">Planeje e otimize rotas de entrega para máxima eficiência</p>
+            </div>
+
+            <div class="actions-bar">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Buscar rotas..." id="searchInput">
+                </div>
+                <button class="btn-nova-rota" onclick="abrirModalNovaRota()">
+                    <i class="fas fa-plus"></i>
+                    Nova Rota
+                </button>
+            </div>
+
+            <div class="rotas-grid" id="rotasGrid">
+                <!-- Rotas serão carregadas aqui -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nova Rota -->
+    <div id="modalNovaRota" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Nova Rota</h2>
+                <span class="close" onclick="fecharModal()">&times;</span>
+            </div>
+            <form id="formNovaRota">
+                <div class="form-group">
+                    <label class="form-label">Nome da Rota</label>
+                    <input type="text" class="form-input" id="nomeRota" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Origem</label>
+                        <input type="text" class="form-input" id="origem" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Destino</label>
+                        <input type="text" class="form-input" id="destino" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Distância (km)</label>
+                        <input type="number" class="form-input" id="distancia" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tempo Estimado (h)</label>
+                        <input type="number" class="form-input" id="tempoEstimado" step="0.5" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Custo (R$)</label>
+                        <input type="number" class="form-input" id="custo" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" id="status">
+                            <option value="ativa">Ativa</option>
+                            <option value="inativa">Inativa</option>
+                            <option value="manutencao">Manutenção</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-salvar">Salvar Rota</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('authToken')) {
+            window.location.href = 'login.html';
+        }
+
+        // Função de logout
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userName');
+            window.location.href = 'index.html';
+        }
+
+        // Dados de exemplo das rotas
+        let rotas = [
+            {
+                id: 1,
+                nome: "SP - Itaporanga",
+                origem: "São Paulo, SP",
+                destino: "Itaporanga, PB",
+                distancia: 2150,
+                tempoEstimado: 28,
+                custo: 850.00,
+                status: "ativa",
+                entregas: 45,
+                utilizacao: 85
+            },
+            {
+                id: 2,
+                nome: "Guarulhos - Campina Grande",
+                origem: "Guarulhos, SP",
+                destino: "Campina Grande, PB",
+                distancia: 2080,
+                tempoEstimado: 26,
+                custo: 780.00,
+                status: "ativa",
+                entregas: 32,
+                utilizacao: 78
+            },
+            {
+                id: 3,
+                nome: "SP - Sousa",
+                origem: "São Paulo, SP",
+                destino: "Sousa, PB",
+                distancia: 2280,
+                tempoEstimado: 30,
+                custo: 920.00,
+                status: "manutencao",
+                entregas: 18,
+                utilizacao: 45
+            },
+            {
+                id: 4,
+                nome: "Guarulhos - João Pessoa",
+                origem: "Guarulhos, SP",
+                destino: "João Pessoa, PB",
+                distancia: 2050,
+                tempoEstimado: 25,
+                custo: 750.00,
+                status: "ativa",
+                entregas: 28,
+                utilizacao: 92
+            },
+            {
+                id: 5,
+                nome: "SP - Cajazeiras",
+                origem: "São Paulo, SP",
+                destino: "Cajazeiras, PB",
+                distancia: 2200,
+                tempoEstimado: 29,
+                custo: 880.00,
+                status: "inativa",
+                entregas: 0,
+                utilizacao: 0
+            }
+        ];
+
+        // Carregar rotas na página
+        function carregarRotas() {
+            const grid = document.getElementById('rotasGrid');
+            grid.innerHTML = '';
+
+            rotas.forEach(rota => {
+                const rotaCard = criarCardRota(rota);
+                grid.appendChild(rotaCard);
+            });
+        }
+
+        // Criar card de rota
+        function criarCardRota(rota) {
+            const card = document.createElement('div');
+            card.className = 'rota-card';
+            
+            const statusClass = `status-${rota.status}`;
+            const statusText = {
+                'ativa': 'Ativa',
+                'inativa': 'Inativa',
+                'manutencao': 'Manutenção'
+            };
+
+            card.innerHTML = `
+                <div class="rota-header">
+                    <h3 class="rota-nome">${rota.nome}</h3>
+                    <span class="rota-status ${statusClass}">${statusText[rota.status]}</span>
+                </div>
+                
+                <div class="rota-info">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt info-icon"></i>
+                        <span>${rota.origem}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-flag-checkered info-icon"></i>
+                        <span>${rota.destino}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-route info-icon"></i>
+                        <span>${rota.distancia} km • ${rota.tempoEstimado}h</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-dollar-sign info-icon"></i>
+                        <span>R$ ${rota.custo.toFixed(2)}</span>
+                    </div>
+                </div>
+                
+                <div class="rota-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">${rota.entregas}</div>
+                        <div class="stat-label">Entregas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${rota.utilizacao}%</div>
+                        <div class="stat-label">Utilização</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${(rota.custo / rota.distancia).toFixed(2)}</div>
+                        <div class="stat-label">R$/km</div>
+                    </div>
+                </div>
+                
+                <div class="rota-actions">
+                    <button class="btn-action btn-editar" onclick="editarRota(${rota.id})">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="btn-action btn-otimizar" onclick="otimizarRota(${rota.id})">
+                        <i class="fas fa-route"></i> Otimizar
+                    </button>
+                    <button class="btn-action btn-excluir" onclick="excluirRota(${rota.id})">
+                        <i class="fas fa-trash"></i> Excluir
+                    </button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Funções do modal
+        function abrirModalNovaRota() {
+            document.getElementById('modalNovaRota').style.display = 'block';
+        }
+
+        function fecharModal() {
+            document.getElementById('modalNovaRota').style.display = 'none';
+            document.getElementById('formNovaRota').reset();
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalNovaRota');
+            if (event.target == modal) {
+                fecharModal();
+            }
+        }
+
+        // Salvar nova rota
+        document.getElementById('formNovaRota').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const novaRota = {
+                id: rotas.length + 1,
+                nome: document.getElementById('nomeRota').value,
+                origem: document.getElementById('origem').value,
+                destino: document.getElementById('destino').value,
+                distancia: parseInt(document.getElementById('distancia').value),
+                tempoEstimado: parseFloat(document.getElementById('tempoEstimado').value),
+                custo: parseFloat(document.getElementById('custo').value),
+                status: document.getElementById('status').value,
+                entregas: 0,
+                utilizacao: 0
+            };
+
+            rotas.push(novaRota);
+            carregarRotas();
+            fecharModal();
+            
+            alert('Rota criada com sucesso!');
+        });
+
+        // Funções das ações
+        function editarRota(id) {
+            const rota = rotas.find(r => r.id === id);
+            alert(`Funcionalidade em desenvolvimento: Editar rota "${rota.nome}"`);
+        }
+
+        function otimizarRota(id) {
+            const rota = rotas.find(r => r.id === id);
+            alert(`Funcionalidade em desenvolvimento: Otimizar rota "${rota.nome}"`);
+        }
+
+        function excluirRota(id) {
+            const rota = rotas.find(r => r.id === id);
+            if (confirm(`Tem certeza que deseja excluir a rota "${rota.nome}"?`)) {
+                rotas = rotas.filter(r => r.id !== id);
+                carregarRotas();
+                alert('Rota excluída com sucesso!');
+            }
+        }
+
+        // Busca
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const termo = e.target.value.toLowerCase();
+            const rotasFiltradas = rotas.filter(rota => 
+                rota.nome.toLowerCase().includes(termo) ||
+                rota.origem.toLowerCase().includes(termo) ||
+                rota.destino.toLowerCase().includes(termo)
+            );
+            
+            const grid = document.getElementById('rotasGrid');
+            grid.innerHTML = '';
+            rotasFiltradas.forEach(rota => {
+                const rotaCard = criarCardRota(rota);
+                grid.appendChild(rotaCard);
+            });
+        });
+
+        // Carregar rotas ao iniciar
+        document.addEventListener('DOMContentLoaded', carregarRotas);
+    </script>
+</body>
+</html>

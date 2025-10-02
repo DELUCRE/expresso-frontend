@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - Sistema de Gestão | Expresso Itaporanga</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .configuracoes-container {
+            min-height: 100vh;
+            background: var(--light-bg);
+            padding-top: 100px;
+            padding-bottom: 2rem;
+        }
+        
+        .page-header {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .config-sections {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .config-section {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: var(--white);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .section-icon {
+            font-size: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin: 0;
+        }
+        
+        .section-content {
+            padding: 2rem;
+        }
+        
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .config-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        
+        .config-item:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .config-info {
+            flex: 1;
+        }
+        
+        .config-label {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .config-description {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+        
+        .config-control {
+            margin-left: 1rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            color: var(--text-color);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .btn-salvar {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .btn-salvar:hover {
+            background: #003366;
+        }
+        
+        .backup-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .backup-info {
+            flex: 1;
+        }
+        
+        .backup-date {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .backup-size {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+        
+        .backup-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-backup {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .btn-download {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .btn-restore {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .btn-delete {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        @media (max-width: 768px) {
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .config-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .config-control {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="static/images/logo-oficial.png" alt="Expresso Itaporanga" class="logo">
+                <span class="brand-text">Expresso Itaporanga</span>
+            </div>
+            
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="gestao-auth.html" class="nav-link">Voltar</a></li>
+                    <li><a href="#" class="nav-link" onclick="logout()">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="configuracoes-container">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Configurações do Sistema</h1>
+                <p class="page-subtitle">Configure parâmetros do sistema e preferências</p>
+            </div>
+
+            <div class="config-sections">
+                <!-- Configurações Gerais -->
+                <div class="config-section">
+                    <div class="section-header">
+                        <i class="fas fa-cog section-icon"></i>
+                        <h2 class="section-title">Configurações Gerais</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="config-grid">
+                            <div class="config-item">
+                                <div class="config-info">
+                                    <div class="config-label">Notificações por E-mail</div>
+                                    <div class="config-description">Receber notificações de entregas por e-mail</div>
+                                </div>
+                                <div class="config-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="emailNotifications" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item">
+                                <div class="config-info">
+                                    <div class="config-label">Notificações SMS</div>
+                                    <div class="config-description">Enviar SMS para clientes sobre status das entregas</div>
+                                </div>
+                                <div class="config-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="smsNotifications" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item">
+                                <div class="config-info">
+                                    <div class="config-label">Rastreamento em Tempo Real</div>
+                                    <div class="config-description">Permitir rastreamento em tempo real das entregas</div>
+                                </div>
+                                <div class="config-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="realTimeTracking" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item">
+                                <div class="config-info">
+                                    <div class="config-label">Modo Escuro</div>
+                                    <div class="config-description">Ativar tema escuro para o sistema</div>
+                                </div>
+                                <div class="config-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="darkMode">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configurações da Empresa -->
+                <div class="config-section">
+                    <div class="section-header">
+                        <i class="fas fa-building section-icon"></i>
+                        <h2 class="section-title">Dados da Empresa</h2>
+                    </div>
+                    <div class="section-content">
+                        <form id="formEmpresa">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Nome da Empresa</label>
+                                    <input type="text" class="form-input" value="Expresso Itaporanga" id="nomeEmpresa">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">CNPJ</label>
+                                    <input type="text" class="form-input" value="12.345.678/0001-90" id="cnpj">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Telefone SP</label>
+                                    <input type="text" class="form-input" value="(11) 94036-1071" id="telefoneSP">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Telefone PB</label>
+                                    <input type="text" class="form-input" value="(83) 99832-3948" id="telefonePB">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">E-mail Comercial</label>
+                                <input type="email" class="form-input" value="comercial@expressoitaporanga.com.br" id="emailComercial">
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Endereço SP</label>
+                                    <input type="text" class="form-input" value="Rua Remanso, 12 - Guarulhos/SP" id="enderecoSP">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Endereço PB</label>
+                                    <input type="text" class="form-input" value="Rod PB-372, S/N - Itaporanga/PB" id="enderecoPB">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Configurações de Segurança -->
+                <div class="config-section">
+                    <div class="section-header">
+                        <i class="fas fa-shield-alt section-icon"></i>
+                        <h2 class="section-title">Segurança</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="config-grid">
+                            <div class="config-item">
+                                <div class="config-info">
+                                    <div class="config-label">Autenticação de Dois Fatores</div>
+                                    <div class="config-description">Adicionar camada extra de segurança no login</div>
+                                </div>
+                                <div class="config-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="twoFactorAuth">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item">
+                                <div class="config-info">
+                                    <div class="config-label">Sessão Automática</div>
+                                    <div class="config-description">Logout automático após inatividade</div>
+                                </div>
+                                <div class="config-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="autoLogout" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top: 2rem;">
+                            <label class="form-label">Alterar Senha</label>
+                            <div class="form-row">
+                                <input type="password" class="form-input" placeholder="Nova senha" id="novaSenha">
+                                <input type="password" class="form-input" placeholder="Confirmar senha" id="confirmarSenha">
+                            </div>
+                            <button type="button" class="btn-salvar" onclick="alterarSenha()" style="margin-top: 1rem;">Alterar Senha</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backup e Restauração -->
+                <div class="config-section">
+                    <div class="section-header">
+                        <i class="fas fa-database section-icon"></i>
+                        <h2 class="section-title">Backup e Restauração</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i>
+                            Último backup realizado em: 01/10/2025 às 08:30
+                        </div>
+                        
+                        <div class="config-grid">
+                            <div class="config-item">
+                                <div class="config-info">
+                                    <div class="config-label">Backup Automático</div>
+                                    <div class="config-description">Realizar backup automático diariamente</div>
+                                </div>
+                                <div class="config-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="autoBackup" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 2rem;">
+                            <button type="button" class="btn-salvar" onclick="criarBackup()">
+                                <i class="fas fa-download"></i> Criar Backup Agora
+                            </button>
+                        </div>
+                        
+                        <div style="margin-top: 2rem;">
+                            <h4 style="color: var(--primary-color); margin-bottom: 1rem;">Backups Disponíveis</h4>
+                            
+                            <div class="backup-item">
+                                <div class="backup-info">
+                                    <div class="backup-date">01/10/2025 - 08:30</div>
+                                    <div class="backup-size">Tamanho: 2.5 MB</div>
+                                </div>
+                                <div class="backup-actions">
+                                    <button class="btn-backup btn-download" onclick="downloadBackup('2025-10-01')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn-backup btn-restore" onclick="restaurarBackup('2025-10-01')">
+                                        <i class="fas fa-undo"></i> Restaurar
+                                    </button>
+                                    <button class="btn-backup btn-delete" onclick="excluirBackup('2025-10-01')">
+                                        <i class="fas fa-trash"></i> Excluir
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="backup-item">
+                                <div class="backup-info">
+                                    <div class="backup-date">30/09/2025 - 08:30</div>
+                                    <div class="backup-size">Tamanho: 2.3 MB</div>
+                                </div>
+                                <div class="backup-actions">
+                                    <button class="btn-backup btn-download" onclick="downloadBackup('2025-09-30')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn-backup btn-restore" onclick="restaurarBackup('2025-09-30')">
+                                        <i class="fas fa-undo"></i> Restaurar
+                                    </button>
+                                    <button class="btn-backup btn-delete" onclick="excluirBackup('2025-09-30')">
+                                        <i class="fas fa-trash"></i> Excluir
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('authToken')) {
+            window.location.href = 'login.html';
+        }
+
+        // Função de logout
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userName');
+            window.location.href = 'index.html';
+        }
+
+        // Salvar configurações da empresa
+        document.getElementById('formEmpresa').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const dadosEmpresa = {
+                nome: document.getElementById('nomeEmpresa').value,
+                cnpj: document.getElementById('cnpj').value,
+                telefoneSP: document.getElementById('telefoneSP').value,
+                telefonePB: document.getElementById('telefonePB').value,
+                email: document.getElementById('emailComercial').value,
+                enderecoSP: document.getElementById('enderecoSP').value,
+                enderecoPB: document.getElementById('enderecoPB').value
+            };
+            
+            localStorage.setItem('dadosEmpresa', JSON.stringify(dadosEmpresa));
+            alert('Dados da empresa salvos com sucesso!');
+        });
+
+        // Alterar senha
+        function alterarSenha() {
+            const novaSenha = document.getElementById('novaSenha').value;
+            const confirmarSenha = document.getElementById('confirmarSenha').value;
+            
+            if (!novaSenha || !confirmarSenha) {
+                alert('Por favor, preencha todos os campos de senha.');
+                return;
+            }
+            
+            if (novaSenha !== confirmarSenha) {
+                alert('As senhas não coincidem.');
+                return;
+            }
+            
+            if (novaSenha.length < 6) {
+                alert('A senha deve ter pelo menos 6 caracteres.');
+                return;
+            }
+            
+            // Simular alteração de senha
+            alert('Senha alterada com sucesso!');
+            document.getElementById('novaSenha').value = '';
+            document.getElementById('confirmarSenha').value = '';
+        }
+
+        // Funções de backup
+        function criarBackup() {
+            alert('Backup criado com sucesso!\\nData: ' + new Date().toLocaleString('pt-BR'));
+        }
+
+        function downloadBackup(data) {
+            alert(`Funcionalidade em desenvolvimento: Download do backup de ${data}`);
+        }
+
+        function restaurarBackup(data) {
+            if (confirm(`Tem certeza que deseja restaurar o backup de ${data}?\\nEsta ação não pode ser desfeita.`)) {
+                alert(`Backup de ${data} restaurado com sucesso!`);
+            }
+        }
+
+        function excluirBackup(data) {
+            if (confirm(`Tem certeza que deseja excluir o backup de ${data}?`)) {
+                alert(`Backup de ${data} excluído com sucesso!`);
+            }
+        }
+
+        // Salvar configurações dos toggles
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const config = {};
+                config[this.id] = this.checked;
+                
+                // Salvar no localStorage
+                const configSalvas = JSON.parse(localStorage.getItem('configuracoes') || '{}');
+                Object.assign(configSalvas, config);
+                localStorage.setItem('configuracoes', JSON.stringify(configSalvas));
+                
+                console.log(`Configuração ${this.id} alterada para: ${this.checked}`);
+            });
+        });
+
+        // Carregar configurações salvas
+        document.addEventListener('DOMContentLoaded', function() {
+            const configSalvas = JSON.parse(localStorage.getItem('configuracoes') || '{}');
+            
+            Object.keys(configSalvas).forEach(key => {
+                const checkbox = document.getElementById(key);
+                if (checkbox) {
+                    checkbox.checked = configSalvas[key];
+                }
+            });
+            
+            // Carregar dados da empresa
+            const dadosEmpresa = JSON.parse(localStorage.getItem('dadosEmpresa') || '{}');
+            if (Object.keys(dadosEmpresa).length > 0) {
+                document.getElementById('nomeEmpresa').value = dadosEmpresa.nome || 'Expresso Itaporanga';
+                document.getElementById('cnpj').value = dadosEmpresa.cnpj || '12.345.678/0001-90';
+                document.getElementById('telefoneSP').value = dadosEmpresa.telefoneSP || '(11) 94036-1071';
+                document.getElementById('telefonePB').value = dadosEmpresa.telefonePB || '(83) 99832-3948';
+                document.getElementById('emailComercial').value = dadosEmpresa.email || 'comercial@expressoitaporanga.com.br';
+                document.getElementById('enderecoSP').value = dadosEmpresa.enderecoSP || 'Rua Remanso, 12 - Guarulhos/SP';
+                document.getElementById('enderecoPB').value = dadosEmpresa.enderecoPB || 'Rod PB-372, S/N - Itaporanga/PB';
+            }
+        });
+    </script>
+</body>
+</html>
