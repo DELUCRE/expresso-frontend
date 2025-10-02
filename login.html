@@ -12,7 +12,7 @@
     <div class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <img src="static/images/logo.png" alt="Expresso Itaporanga" class="login-logo">
+                <img src="static/images/logo-oficial.png" alt="Expresso Itaporanga" class="login-logo">
                 <h1>Sistema de Gestão</h1>
                 <p>Acesse sua conta para gerenciar entregas</p>
             </div>
@@ -109,7 +109,7 @@
                     
                     // Redirect to dashboard after 1 second
                     setTimeout(() => {
-                        window.location.href = 'gestao-auth.html';
+                        window.location.href = 'gestao.html';
                     }, 1000);
                 } else {
                     throw new Error('Credenciais inválidas');
@@ -125,7 +125,7 @@
 
         // Check if user is already logged in
         if (localStorage.getItem('authToken')) {
-            window.location.href = 'gestao-auth.html';
+            window.location.href = 'gestao.html';
         }
     </script>
 </body>
