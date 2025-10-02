@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Entregas - Sistema de Gestão | Expresso Itaporanga</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .entregas-container {
+            min-height: 100vh;
+            background: var(--light-bg);
+            padding-top: 100px;
+            padding-bottom: 2rem;
+        }
+        
+        .page-header {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .filters-section {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .filters-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-label {
+            color: var(--text-color);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .filter-input,
+        .filter-select {
+            padding: 0.5rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-filter {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .entregas-table-container {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .entregas-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .entregas-table th {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .entregas-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        
+        .entregas-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-coletado {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .status-transito {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        
+        .status-entregue {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+        
+        .status-cancelado {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-action {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .btn-edit {
+            background: #2196f3;
+            color: white;
+        }
+        
+        .btn-track {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-color);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .entregas-table-container {
+                overflow-x: auto;
+            }
+            
+            .filters-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="static/images/logo-oficial.png" alt="Expresso Itaporanga" class="logo">
+                <span class="brand-text">Expresso Itaporanga</span>
+            </div>
+            
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="gestao-auth.html" class="nav-link">Voltar</a></li>
+                    <li><a href="#" class="nav-link" onclick="logout()">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="entregas-container">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Gerenciar Entregas</h1>
+                <p class="page-subtitle">Visualize, edite e acompanhe todas as entregas</p>
+            </div>
+
+            <div class="filters-section">
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label class="filter-label">Código de Rastreamento</label>
+                        <input type="text" class="filter-input" id="filterCodigo" placeholder="EI12345678">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Status</label>
+                        <select class="filter-select" id="filterStatus">
+                            <option value="">Todos os status</option>
+                            <option value="coletado">Coletado</option>
+                            <option value="transito">Em Trânsito</option>
+                            <option value="entregue">Entregue</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Destinatário</label>
+                        <input type="text" class="filter-input" id="filterDestinatario" placeholder="Nome do destinatário">
+                    </div>
+                    <div class="filter-group">
+                        <button class="btn-filter" onclick="aplicarFiltros()">
+                            <i class="fas fa-search"></i> Filtrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="entregas-table-container">
+                <table class="entregas-table" id="entregasTable">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Destinatário</th>
+                            <th>Destino</th>
+                            <th>Status</th>
+                            <th>Data</th>
+                            <th>Valor</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="entregasTableBody">
+                        <!-- Dados serão inseridos via JavaScript -->
+                    </tbody>
+                </table>
+                
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <h3>Nenhuma entrega encontrada</h3>
+                    <p>Não há entregas cadastradas ou que correspondam aos filtros aplicados.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('authToken')) {
+            window.location.href = 'login.html';
+        }
+
+        // Função de logout
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userName');
+            window.location.href = 'index.html';
+        }
+
+        // Dados de exemplo (simulação)
+        let entregasExemplo = [
+            {
+                codigo: 'EI12345678',
+                destinatario_nome: 'João Silva',
+                destinatario_endereco: 'Rua das Flores, 123 - Itaporanga/PB',
+                status: 'transito',
+                data_cadastro: '15/09/2024',
+                mercadoria_valor: '250.00'
+            },
+            {
+                codigo: 'EI87654321',
+                destinatario_nome: 'Maria Santos',
+                destinatario_endereco: 'Av. Principal, 456 - São Paulo/SP',
+                status: 'entregue',
+                data_cadastro: '10/09/2024',
+                mercadoria_valor: '180.50'
+            },
+            {
+                codigo: 'EI11223344',
+                destinatario_nome: 'Pedro Oliveira',
+                destinatario_endereco: 'Rua do Comércio, 789 - Guarulhos/SP',
+                status: 'coletado',
+                data_cadastro: '20/09/2024',
+                mercadoria_valor: '320.75'
+            }
+        ];
+
+        // Carregar entregas do localStorage ou usar dados de exemplo
+        function carregarEntregas() {
+            let entregas = JSON.parse(localStorage.getItem('entregas') || '[]');
+            if (entregas.length === 0) {
+                entregas = entregasExemplo;
+                localStorage.setItem('entregas', JSON.stringify(entregas));
+            }
+            return entregas;
+        }
+
+        // Renderizar tabela de entregas
+        function renderizarEntregas(entregas = null) {
+            if (!entregas) {
+                entregas = carregarEntregas();
+            }
+
+            const tbody = document.getElementById('entregasTableBody');
+            const emptyState = document.getElementById('emptyState');
+            const table = document.getElementById('entregasTable');
+
+            if (entregas.length === 0) {
+                table.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            table.style.display = 'table';
+            emptyState.style.display = 'none';
+
+            tbody.innerHTML = entregas.map(entrega => `
+                <tr>
+                    <td><strong>${entrega.codigo}</strong></td>
+                    <td>${entrega.destinatario_nome}</td>
+                    <td>${entrega.destinatario_endereco}</td>
+                    <td><span class="status-badge status-${entrega.status}">${getStatusText(entrega.status)}</span></td>
+                    <td>${entrega.data_cadastro}</td>
+                    <td>R$ ${entrega.mercadoria_valor}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-action btn-edit" onclick="editarEntrega('${entrega.codigo}')" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-action btn-track" onclick="rastrearEntrega('${entrega.codigo}')" title="Rastrear">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </button>
+                            <button class="btn-action btn-delete" onclick="excluirEntrega('${entrega.codigo}')" title="Excluir">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Converter status para texto
+        function getStatusText(status) {
+            const statusMap = {
+                'coletado': 'Coletado',
+                'transito': 'Em Trânsito',
+                'entregue': 'Entregue',
+                'cancelado': 'Cancelado'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Aplicar filtros
+        function aplicarFiltros() {
+            const entregas = carregarEntregas();
+            const codigo = document.getElementById('filterCodigo').value.toLowerCase();
+            const status = document.getElementById('filterStatus').value;
+            const destinatario = document.getElementById('filterDestinatario').value.toLowerCase();
+
+            const entregasFiltradas = entregas.filter(entrega => {
+                const matchCodigo = !codigo || entrega.codigo.toLowerCase().includes(codigo);
+                const matchStatus = !status || entrega.status === status;
+                const matchDestinatario = !destinatario || entrega.destinatario_nome.toLowerCase().includes(destinatario);
+                
+                return matchCodigo && matchStatus && matchDestinatario;
+            });
+
+            renderizarEntregas(entregasFiltradas);
+        }
+
+        // Ações das entregas
+        function editarEntrega(codigo) {
+            alert(`Funcionalidade em desenvolvimento: Editar entrega ${codigo}`);
+        }
+
+        function rastrearEntrega(codigo) {
+            alert(`Funcionalidade em desenvolvimento: Rastrear entrega ${codigo}`);
+        }
+
+        function excluirEntrega(codigo) {
+            if (confirm(`Tem certeza que deseja excluir a entrega ${codigo}?`)) {
+                let entregas = carregarEntregas();
+                entregas = entregas.filter(e => e.codigo !== codigo);
+                localStorage.setItem('entregas', JSON.stringify(entregas));
+                renderizarEntregas();
+                alert('Entrega excluída com sucesso!');
+            }
+        }
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            renderizarEntregas();
+        });
+    </script>
+</body>
+</html>
