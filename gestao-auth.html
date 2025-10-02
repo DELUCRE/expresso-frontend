@@ -5,19 +5,183 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestão - Expresso Itaporanga</title>
     <link rel="stylesheet" href="static/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Estilos específicos para gestão */
+        .gestao-container {
+            min-height: 100vh;
+            background: var(--light-bg);
+            padding-top: 80px;
+        }
+        
+        .gestao-header {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .gestao-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .gestao-subtitle {
+            opacity: 0.8;
+        }
+        
+        .user-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-welcome {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logout-btn {
+            background: var(--accent-color);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #e67e00;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .action-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .action-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        
+        .action-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .action-description {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .action-btn {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        .action-btn:hover {
+            background: #003366;
+        }
+        
+        @media (max-width: 768px) {
+            .gestao-title {
+                font-size: 2rem;
+            }
+            
+            .stats-grid,
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="nav-brand">
-                <img src="static/images/logo.png" alt="Expresso Itaporanga" class="logo">
+                <img src="static/images/logo-oficial.png" alt="Expresso Itaporanga" class="logo">
                 <span class="brand-text">Expresso Itaporanga</span>
             </div>
             
-            <nav class="nav">
+            <!-- Menu Hamburger -->
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Navigation -->
+            <nav class="nav" id="nav">
                 <ul class="nav-list">
                     <li><a href="index.html" class="nav-link">Início</a></li>
                     <li><a href="#" class="nav-link" onclick="logout()">Sair</a></li>
@@ -26,98 +190,154 @@
         </div>
     </header>
 
-    <!-- Sistema de Gestão -->
-    <section class="gestao-hero">
-        <div class="container">
-            <h1>Sistema de Gestão</h1>
-            <p>Painel administrativo da Expresso Itaporanga</p>
-        </div>
-    </section>
-
-    <!-- Dashboard -->
-    <section class="dashboard">
-        <div class="container">
-            <h2>Visão Geral</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number">247</div>
-                    <div class="stat-label">Entregas Ativas</div>
+    <div class="gestao-container">
+        <div class="gestao-header">
+            <div class="container">
+                <div class="user-info">
+                    <div class="user-welcome">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Bem-vindo, <strong id="userName">Admin</strong></span>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number">1,543</div>
-                    <div class="stat-label">Total Entregas</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">98.5%</div>
-                    <div class="stat-label">Taxa de Sucesso</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">156</div>
-                    <div class="stat-label">Clientes Ativos</div>
-                </div>
+                <h1 class="gestao-title">Sistema de Gestão</h1>
+                <p class="gestao-subtitle">Painel administrativo da Expresso Itaporanga</p>
             </div>
         </div>
-    </section>
 
-    <!-- Ações Rápidas -->
-    <section class="acoes-rapidas">
         <div class="container">
-            <div class="acoes-grid">
-                <div class="acao-card">
-                    <i class="fas fa-plus"></i>
-                    <h3>Nova Entrega</h3>
-                    <p>Cadastre uma nova entrega no sistema com todas as informações necessárias.</p>
-                    <button class="btn btn-primary">Cadastrar Entrega</button>
+            <!-- Visão Geral -->
+            <section class="stats-section">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">Visão Geral</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">247</div>
+                        <div class="stat-label">Entregas Ativas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1.543</div>
+                        <div class="stat-label">Total Entregas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">98.5%</div>
+                        <div class="stat-label">Taxa de Sucesso</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">156</div>
+                        <div class="stat-label">Clientes Ativos</div>
+                    </div>
                 </div>
-                <div class="acao-card">
-                    <i class="fas fa-list"></i>
-                    <h3>Gerenciar Entregas</h3>
-                    <p>Visualize, edite e acompanhe todas as entregas em andamento.</p>
-                    <button class="btn btn-primary">Ver Entregas</button>
+            </section>
+
+            <!-- Ações Rápidas -->
+            <section class="actions-section">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">Ações Rápidas</h2>
+                <div class="actions-grid">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <h3 class="action-title">Nova Entrega</h3>
+                        <p class="action-description">Cadastre uma nova entrega no sistema com todas as informações necessárias.</p>
+                        <button class="action-btn" onclick="novaEntrega()">Cadastrar Entrega</button>
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-list-alt"></i>
+                        </div>
+                        <h3 class="action-title">Gerenciar Entregas</h3>
+                        <p class="action-description">Visualize, edite e acompanhe todas as entregas em andamento.</p>
+                        <button class="action-btn" onclick="gerenciarEntregas()">Ver Entregas</button>
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="action-title">Clientes</h3>
+                        <p class="action-description">Gerencie informações dos clientes e histórico de entregas.</p>
+                        <button class="action-btn" onclick="gerenciarClientes()">Gerenciar Clientes</button>
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3 class="action-title">Relatórios</h3>
+                        <p class="action-description">Acesse relatórios detalhados e análises de desempenho.</p>
+                        <button class="action-btn" onclick="verRelatorios()">Ver Relatórios</button>
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <h3 class="action-title">Rotas</h3>
+                        <p class="action-description">Planeje e otimize rotas de entrega para máxima eficiência.</p>
+                        <button class="action-btn" onclick="gerenciarRotas()">Gerenciar Rotas</button>
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <h3 class="action-title">Configurações</h3>
+                        <p class="action-description">Configure parâmetros do sistema e preferências.</p>
+                        <button class="action-btn" onclick="configuracoes()">Configurar</button>
+                    </div>
                 </div>
-                <div class="acao-card">
-                    <i class="fas fa-users"></i>
-                    <h3>Clientes</h3>
-                    <p>Gerencie informações dos clientes e histórico de entregas.</p>
-                    <button class="btn btn-primary">Gerenciar Clientes</button>
-                </div>
-                <div class="acao-card">
-                    <i class="fas fa-chart-bar"></i>
-                    <h3>Relatórios</h3>
-                    <p>Acesse relatórios detalhados e análises de desempenho.</p>
-                    <button class="btn btn-primary">Ver Relatórios</button>
-                </div>
-                <div class="acao-card">
-                    <i class="fas fa-route"></i>
-                    <h3>Rotas</h3>
-                    <p>Planeje e otimize rotas de entrega para máxima eficiência.</p>
-                    <button class="btn btn-primary">Gerenciar Rotas</button>
-                </div>
-                <div class="acao-card">
-                    <i class="fas fa-cog"></i>
-                    <h3>Configurações</h3>
-                    <p>Configure parâmetros do sistema e preferências.</p>
-                    <button class="btn btn-primary">Configurar</button>
-                </div>
-            </div>
+            </section>
         </div>
-    </section>
+    </div>
 
     <script>
-        // Check authentication on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                window.location.href = 'login.html';
-                return;
-            }
-        });
-
-        // Logout function
-        function logout() {
-            localStorage.removeItem('authToken');
+        // Verificar se o usuário está logado
+        if (!localStorage.getItem('authToken')) {
             window.location.href = 'login.html';
         }
+
+        // Definir nome do usuário
+        document.getElementById('userName').textContent = localStorage.getItem('userName') || 'Admin';
+
+        // Função de logout
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userName');
+            window.location.href = 'index.html';
+        }
+
+        // Funções das ações
+        function novaEntrega() {
+            alert('Funcionalidade em desenvolvimento: Nova Entrega');
+        }
+
+        function gerenciarEntregas() {
+            alert('Funcionalidade em desenvolvimento: Gerenciar Entregas');
+        }
+
+        function gerenciarClientes() {
+            alert('Funcionalidade em desenvolvimento: Gerenciar Clientes');
+        }
+
+        function verRelatorios() {
+            window.location.href = 'relatorios.html';
+        }
+
+        function gerenciarRotas() {
+            alert('Funcionalidade em desenvolvimento: Gerenciar Rotas');
+        }
+
+        function configuracoes() {
+            alert('Funcionalidade em desenvolvimento: Configurações');
+        }
+
+        // Menu hamburger
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('nav').classList.toggle('active');
+        });
     </script>
 </body>
 </html>

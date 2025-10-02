@@ -105,11 +105,12 @@
                 // For demo purposes, accept admin/admin123
                 if (username === 'admin' && password === 'admin123') {
                     localStorage.setItem('authToken', 'demo-token-123');
+                    localStorage.setItem('userName', username);
                     messageDiv.innerHTML = '<div class="success-message"><i class="fas fa-check-circle"></i> Login realizado com sucesso!</div>';
                     
                     // Redirect to dashboard after 1 second
                     setTimeout(() => {
-                        window.location.href = 'gestao.html';
+                        window.location.href = 'gestao-auth.html';
                     }, 1000);
                 } else {
                     throw new Error('Credenciais inválidas');
@@ -125,7 +126,7 @@
 
         // Check if user is already logged in
         if (localStorage.getItem('authToken')) {
-            window.location.href = 'gestao.html';
+            window.location.href = 'gestao-auth.html';
         }
     </script>
 </body>
