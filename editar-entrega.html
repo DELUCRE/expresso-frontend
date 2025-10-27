@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Entrega - Sistema de Gestão | Expresso Itaporanga</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .edit-container {
+            min-height: 100vh;
+            background: var(--light-bg);
+            padding-top: 80px;
+        }
+        
+        .edit-header {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .edit-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .edit-subtitle {
+            opacity: 0.8;
+        }
+        
+        .edit-form {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .form-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-pendente {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-coletado {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-em_transito {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-entregue {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #003366;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .success {
+            background: #d1e7dd;
+            color: #0f5132;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="static/images/logo.png" alt="Expresso Itaporanga" class="logo">
+                <span class="brand-text">Expresso Itaporanga</span>
+            </div>
+            <nav class="nav" id="nav">
+                <a href="gestao-auth.html" class="nav-link">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+                </a>
+                <a href="#" class="nav-link" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </a>
+            </nav>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="edit-container">
+        <div class="edit-header">
+            <div class="container">
+                <h1 class="edit-title">Editar Entrega</h1>
+                <p class="edit-subtitle">Atualize as informações da entrega</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div id="loading" class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Carregando dados da entrega...
+            </div>
+            
+            <div id="error" class="error" style="display: none;"></div>
+            <div id="success" class="success" style="display: none;"></div>
+            
+            <form id="editForm" class="edit-form" style="display: none;">
+                <!-- Informações da Entrega -->
+                <div class="form-section">
+                    <h3><i class="fas fa-box"></i> Informações da Entrega</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="codigoRastreamento">Código de Rastreamento</label>
+                            <input type="text" id="codigoRastreamento" name="codigoRastreamento" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select id="status" name="status" required>
+                                <option value="pendente">Pendente</option>
+                                <option value="coletado">Coletado</option>
+                                <option value="em_transito">Em Trânsito</option>
+                                <option value="entregue">Entregue</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dados do Remetente -->
+                <div class="form-section">
+                    <h3><i class="fas fa-user"></i> Dados do Remetente</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="remetenteNome">Nome Completo</label>
+                            <input type="text" id="remetenteNome" name="remetenteNome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="remetenteCidade">Cidade/Estado</label>
+                            <input type="text" id="remetenteCidade" name="remetenteCidade" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="remetenteEndereco">Endereço Completo</label>
+                            <textarea id="remetenteEndereco" name="remetenteEndereco" required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dados do Destinatário -->
+                <div class="form-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> Dados do Destinatário</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="destinatarioNome">Nome Completo</label>
+                            <input type="text" id="destinatarioNome" name="destinatarioNome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="destinatarioCidade">Cidade/Estado</label>
+                            <input type="text" id="destinatarioCidade" name="destinatarioCidade" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="destinatarioEndereco">Endereço Completo</label>
+                            <textarea id="destinatarioEndereco" name="destinatarioEndereco" required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dados da Mercadoria -->
+                <div class="form-section">
+                    <h3><i class="fas fa-package"></i> Dados da Mercadoria</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tipoProduto">Tipo de Produto</label>
+                            <input type="text" id="tipoProduto" name="tipoProduto" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="peso">Peso (kg)</label>
+                            <input type="number" id="peso" name="peso" step="0.1" min="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="valorDeclarado">Valor Declarado (R$)</label>
+                            <input type="number" id="valorDeclarado" name="valorDeclarado" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="observacoes">Observações</label>
+                            <textarea id="observacoes" name="observacoes"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="btn-group">
+                    <a href="gerenciar-entregas.html" class="btn-secondary">
+                        <i class="fas fa-times"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Expresso Itaporanga</h3>
+                    <p>Conectando São Paulo ao Sertão Nordestino com segurança e agilidade.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <p><i class="fas fa-phone"></i> (11) 94036-1071</p>
+                    <p><i class="fas fa-phone"></i> (83) 99832-3948</p>
+                    <p><i class="fas fa-envelope"></i> comercial@expressoitaporanga.com.br</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Expresso Itaporanga. Todos os direitos reservados.</p>
+                <p class="slogan">Servir com paixão, viver como exemplo</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('authToken')) {
+            window.location.href = 'login.html';
+        }
+
+        // Obter ID da entrega da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const entregaId = urlParams.get('id');
+
+        if (!entregaId) {
+            document.getElementById('error').textContent = 'ID da entrega não fornecido.';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('loading').style.display = 'none';
+        } else {
+            carregarEntrega(entregaId);
+        }
+
+        // Função para carregar dados da entrega
+        async function carregarEntrega(id) {
+            try {
+                const response = await fetch(`https://web-production-e1e7.up.railway.app/api/entregas/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error('Entrega não encontrada');
+                }
+                
+                const entrega = await response.json();
+                preencherFormulario(entrega);
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('editForm').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Erro ao carregar entrega:', error);
+                document.getElementById('error').textContent = 'Erro ao carregar dados da entrega: ' + error.message;
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        // Função para preencher o formulário
+        function preencherFormulario(entrega) {
+            document.getElementById('codigoRastreamento').value = entrega.codigo_rastreamento;
+            document.getElementById('status').value = entrega.status;
+            document.getElementById('remetenteNome').value = entrega.remetente_nome;
+            document.getElementById('remetenteCidade').value = entrega.remetente_cidade;
+            document.getElementById('remetenteEndereco').value = entrega.remetente_endereco;
+            document.getElementById('destinatarioNome').value = entrega.destinatario_nome;
+            document.getElementById('destinatarioCidade').value = entrega.destinatario_cidade;
+            document.getElementById('destinatarioEndereco').value = entrega.destinatario_endereco;
+            document.getElementById('tipoProduto').value = entrega.tipo_produto;
+            document.getElementById('peso').value = entrega.peso;
+            document.getElementById('valorDeclarado').value = entrega.valor_declarado;
+            document.getElementById('observacoes').value = entrega.observacoes || '';
+        }
+
+        // Função para salvar alterações
+        document.getElementById('editForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const dadosEntrega = {
+                remetente_nome: formData.get('remetenteNome'),
+                remetente_endereco: formData.get('remetenteEndereco'),
+                remetente_cidade: formData.get('remetenteCidade'),
+                destinatario_nome: formData.get('destinatarioNome'),
+                destinatario_endereco: formData.get('destinatarioEndereco'),
+                destinatario_cidade: formData.get('destinatarioCidade'),
+                tipo_produto: formData.get('tipoProduto'),
+                peso: parseFloat(formData.get('peso')) || 0,
+                valor_declarado: parseFloat(formData.get('valorDeclarado')) || 0,
+                observacoes: formData.get('observacoes'),
+                status: formData.get('status')
+            };
+
+            try {
+                const response = await fetch(`https://web-production-e1e7.up.railway.app/api/entregas/${entregaId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dadosEntrega)
+                });
+
+                if (response.ok) {
+                    document.getElementById('success').textContent = 'Entrega atualizada com sucesso!';
+                    document.getElementById('success').style.display = 'block';
+                    document.getElementById('error').style.display = 'none';
+                    
+                    // Redirecionar após 2 segundos
+                    setTimeout(() => {
+                        window.location.href = 'gerenciar-entregas.html';
+                    }, 2000);
+                } else {
+                    throw new Error('Erro ao atualizar entrega');
+                }
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                document.getElementById('error').textContent = 'Erro ao salvar alterações: ' + error.message;
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('success').style.display = 'none';
+            }
+        });
+
+        // Função de logout
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userName');
+            window.location.href = 'index.html';
+        }
+
+        // Menu toggle
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('nav').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

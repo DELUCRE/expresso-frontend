@@ -654,19 +654,19 @@
                 <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">Visão Geral</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-number">15</div>
+                        <div class="stat-number" id="entregasAtivas">0</div>
                         <div class="stat-label">Entregas Ativas</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">15</div>
+                        <div class="stat-number" id="totalEntregas">0</div>
                         <div class="stat-label">Total Entregas</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">98.5%</div>
+                        <div class="stat-number" id="taxaSucesso">0%</div>
                         <div class="stat-label">Taxa de Sucesso</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">15</div>
+                        <div class="stat-number" id="clientesAtivos">0</div>
                         <div class="stat-label">Clientes Ativos</div>
                     </div>
                 </div>
@@ -1014,6 +1014,40 @@
 
         // Definir nome do usuário
         document.getElementById('userName').textContent = localStorage.getItem('userName') || 'Admin';
+        
+        // Carregar estatísticas do dashboard
+        carregarEstatisticas();
+        
+        // Função para carregar estatísticas reais da API
+        async function carregarEstatisticas() {
+            try {
+                const response = await fetch('https://web-production-e1e7.up.railway.app/api/entregas');
+                const entregas = await response.json();
+                
+                // Calcular estatísticas
+                const totalEntregas = entregas.length;
+                const entregasAtivas = entregas.filter(e => e.status === 'em_transito' || e.status === 'coletado' || e.status === 'pendente').length;
+                const entregasEntregues = entregas.filter(e => e.status === 'entregue').length;
+                const taxaSucesso = totalEntregas > 0 ? ((entregasEntregues / totalEntregas) * 100).toFixed(1) : 0;
+                
+                // Contar clientes únicos
+                const clientesUnicos = new Set(entregas.map(e => e.destinatario_nome)).size;
+                
+                // Atualizar interface
+                document.getElementById('entregasAtivas').textContent = entregasAtivas;
+                document.getElementById('totalEntregas').textContent = totalEntregas;
+                document.getElementById('taxaSucesso').textContent = taxaSucesso + '%';
+                document.getElementById('clientesAtivos').textContent = clientesUnicos;
+                
+            } catch (error) {
+                console.error('Erro ao carregar estatísticas:', error);
+                // Fallback para valores padrão em caso de erro
+                document.getElementById('entregasAtivas').textContent = '0';
+                document.getElementById('totalEntregas').textContent = '0';
+                document.getElementById('taxaSucesso').textContent = '0%';
+                document.getElementById('clientesAtivos').textContent = '0';
+            }
+        }
 
         // Função de logout
         function logout() {
