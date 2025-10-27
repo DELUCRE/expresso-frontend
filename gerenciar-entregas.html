@@ -347,10 +347,10 @@
                     <td>R$ ${entrega.mercadoria_valor}</td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn-action btn-edit" onclick="editarEntrega('${entrega.codigo}')" title="Editar">
+                            <button class="btn-action btn-edit" onclick="window.location.href='editar-entrega.html?id=${entrega.id}'" title="Editar">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button class="btn-action btn-track" onclick="rastrearEntrega('${entrega.codigo}')" title="Rastrear">
+                            <button class="btn-action btn-track" onclick="window.location.href='rastrear-entrega.html?codigo=${entrega.codigo_rastreamento}'" title="Rastrear">
                                 <i class="fas fa-map-marker-alt"></i>
                             </button>
                             <button class="btn-action btn-delete" onclick="excluirEntrega('${entrega.codigo}')" title="Excluir">

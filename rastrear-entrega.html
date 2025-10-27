@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastrear Entrega - Sistema de Gestão | Expresso Itaporanga</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .track-container {
+            min-height: 100vh;
+            background: var(--light-bg);
+            padding-top: 80px;
+        }
+        
+        .track-header {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .track-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .track-subtitle {
+            opacity: 0.8;
+        }
+        
+        .search-section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            align-items: end;
+        }
+        
+        .search-group {
+            flex: 1;
+        }
+        
+        .search-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+        }
+        
+        .search-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .btn-search {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            height: fit-content;
+        }
+        
+        .btn-search:hover {
+            background: #003366;
+        }
+        
+        .tracking-result {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: none;
+        }
+        
+        .entrega-header {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+        
+        .entrega-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .entrega-info label {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+        
+        .entrega-info span {
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+        
+        .status-pendente {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-coletado {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-em_transito {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-entregue {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e1e5e9;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 1rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 3px solid var(--white);
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+        
+        .timeline-item.active::before {
+            background: var(--accent-color);
+            box-shadow: 0 0 0 2px var(--accent-color);
+        }
+        
+        .timeline-date {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.25rem;
+        }
+        
+        .timeline-description {
+            color: #666;
+            font-size: 0.875rem;
+        }
+        
+        .details-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--light-bg);
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .detail-card {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .detail-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .detail-item {
+            margin-bottom: 0.75rem;
+        }
+        
+        .detail-item label {
+            display: block;
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+        
+        .detail-item span {
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--primary-color);
+            display: none;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .no-result {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            display: none;
+        }
+        
+        .no-result i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+        
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .entrega-header {
+                grid-template-columns: 1fr;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="static/images/logo.png" alt="Expresso Itaporanga" class="logo">
+                <span class="brand-text">Expresso Itaporanga</span>
+            </div>
+            <nav class="nav" id="nav">
+                <a href="gestao-auth.html" class="nav-link">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+                </a>
+                <a href="#" class="nav-link" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </a>
+            </nav>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="track-container">
+        <div class="track-header">
+            <div class="container">
+                <h1 class="track-title">Rastrear Entrega</h1>
+                <p class="track-subtitle">Acompanhe o status da sua entrega em tempo real</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Seção de Busca -->
+            <div class="search-section">
+                <form id="searchForm" class="search-form">
+                    <div class="search-group">
+                        <label for="codigoRastreamento">Código de Rastreamento</label>
+                        <input type="text" id="codigoRastreamento" name="codigoRastreamento" 
+                               placeholder="Ex: EI12345678" required>
+                    </div>
+                    <button type="submit" class="btn-search">
+                        <i class="fas fa-search"></i> Rastrear
+                    </button>
+                </form>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Buscando informações da entrega...
+            </div>
+            
+            <!-- Error -->
+            <div id="error" class="error"></div>
+            
+            <!-- No Result -->
+            <div id="noResult" class="no-result">
+                <i class="fas fa-search"></i>
+                <h3>Nenhuma entrega encontrada</h3>
+                <p>Verifique o código de rastreamento e tente novamente.</p>
+            </div>
+            
+            <!-- Resultado do Rastreamento -->
+            <div id="trackingResult" class="tracking-result">
+                <!-- Cabeçalho da Entrega -->
+                <div class="entrega-header">
+                    <div class="entrega-info">
+                        <label>Código de Rastreamento</label>
+                        <span id="resultCodigo">-</span>
+                    </div>
+                    <div class="entrega-info">
+                        <label>Status Atual</label>
+                        <span id="resultStatus" class="status-badge">-</span>
+                    </div>
+                    <div class="entrega-info">
+                        <label>Data de Criação</label>
+                        <span id="resultDataCriacao">-</span>
+                    </div>
+                    <div class="entrega-info">
+                        <label>Última Atualização</label>
+                        <span id="resultDataAtualizacao">-</span>
+                    </div>
+                </div>
+
+                <!-- Timeline de Status -->
+                <div class="timeline-section">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary-color);">
+                        <i class="fas fa-route"></i> Histórico da Entrega
+                    </h3>
+                    <div class="timeline" id="timeline">
+                        <!-- Timeline items serão adicionados dinamicamente -->
+                    </div>
+                </div>
+
+                <!-- Detalhes da Entrega -->
+                <div class="details-section">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary-color);">
+                        <i class="fas fa-info-circle"></i> Detalhes da Entrega
+                    </h3>
+                    <div class="details-grid">
+                        <!-- Remetente -->
+                        <div class="detail-card">
+                            <h4><i class="fas fa-user"></i> Remetente</h4>
+                            <div class="detail-item">
+                                <label>Nome</label>
+                                <span id="remetenteNome">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Cidade</label>
+                                <span id="remetenteCidade">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Endereço</label>
+                                <span id="remetenteEndereco">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Destinatário -->
+                        <div class="detail-card">
+                            <h4><i class="fas fa-map-marker-alt"></i> Destinatário</h4>
+                            <div class="detail-item">
+                                <label>Nome</label>
+                                <span id="destinatarioNome">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Cidade</label>
+                                <span id="destinatarioCidade">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Endereço</label>
+                                <span id="destinatarioEndereco">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Mercadoria -->
+                        <div class="detail-card">
+                            <h4><i class="fas fa-package"></i> Mercadoria</h4>
+                            <div class="detail-item">
+                                <label>Tipo de Produto</label>
+                                <span id="tipoProduto">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Peso</label>
+                                <span id="peso">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Valor Declarado</label>
+                                <span id="valorDeclarado">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Observações</label>
+                                <span id="observacoes">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Expresso Itaporanga</h3>
+                    <p>Conectando São Paulo ao Sertão Nordestino com segurança e agilidade.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <p><i class="fas fa-phone"></i> (11) 94036-1071</p>
+                    <p><i class="fas fa-phone"></i> (83) 99832-3948</p>
+                    <p><i class="fas fa-envelope"></i> comercial@expressoitaporanga.com.br</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Expresso Itaporanga. Todos os direitos reservados.</p>
+                <p class="slogan">Servir com paixão, viver como exemplo</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('authToken')) {
+            window.location.href = 'login.html';
+        }
+
+        // Verificar se há código na URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const codigoUrl = urlParams.get('codigo');
+        if (codigoUrl) {
+            document.getElementById('codigoRastreamento').value = codigoUrl;
+            buscarEntrega(codigoUrl);
+        }
+
+        // Função para buscar entrega
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const codigo = document.getElementById('codigoRastreamento').value.trim();
+            if (codigo) {
+                buscarEntrega(codigo);
+            }
+        });
+
+        // Função para buscar entrega na API
+        async function buscarEntrega(codigo) {
+            // Mostrar loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('noResult').style.display = 'none';
+            document.getElementById('trackingResult').style.display = 'none';
+
+            try {
+                const response = await fetch(`https://web-production-e1e7.up.railway.app/api/entregas`);
+                const entregas = await response.json();
+                
+                // Buscar entrega pelo código
+                const entrega = entregas.find(e => e.codigo_rastreamento === codigo);
+                
+                if (entrega) {
+                    exibirResultado(entrega);
+                } else {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('noResult').style.display = 'block';
+                }
+                
+            } catch (error) {
+                console.error('Erro ao buscar entrega:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').textContent = 'Erro ao buscar entrega. Tente novamente.';
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        // Função para exibir resultado
+        function exibirResultado(entrega) {
+            document.getElementById('loading').style.display = 'none';
+            
+            // Preencher informações básicas
+            document.getElementById('resultCodigo').textContent = entrega.codigo_rastreamento;
+            document.getElementById('resultStatus').textContent = getStatusText(entrega.status);
+            document.getElementById('resultStatus').className = `status-badge status-${entrega.status}`;
+            document.getElementById('resultDataCriacao').textContent = formatarData(entrega.data_criacao);
+            document.getElementById('resultDataAtualizacao').textContent = formatarData(entrega.data_atualizacao);
+            
+            // Preencher detalhes
+            document.getElementById('remetenteNome').textContent = entrega.remetente_nome;
+            document.getElementById('remetenteCidade').textContent = entrega.remetente_cidade;
+            document.getElementById('remetenteEndereco').textContent = entrega.remetente_endereco;
+            document.getElementById('destinatarioNome').textContent = entrega.destinatario_nome;
+            document.getElementById('destinatarioCidade').textContent = entrega.destinatario_cidade;
+            document.getElementById('destinatarioEndereco').textContent = entrega.destinatario_endereco;
+            document.getElementById('tipoProduto').textContent = entrega.tipo_produto;
+            document.getElementById('peso').textContent = entrega.peso ? entrega.peso + ' kg' : '-';
+            document.getElementById('valorDeclarado').textContent = entrega.valor_declarado ? 
+                'R$ ' + entrega.valor_declarado.toFixed(2) : '-';
+            document.getElementById('observacoes').textContent = entrega.observacoes || 'Nenhuma observação';
+            
+            // Criar timeline
+            criarTimeline(entrega);
+            
+            // Mostrar resultado
+            document.getElementById('trackingResult').style.display = 'block';
+        }
+
+        // Função para criar timeline
+        function criarTimeline(entrega) {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            const statusOrder = ['pendente', 'coletado', 'em_transito', 'entregue'];
+            const currentStatusIndex = statusOrder.indexOf(entrega.status);
+            
+            const timelineData = [
+                {
+                    status: 'pendente',
+                    title: 'Entrega Criada',
+                    description: 'Entrega registrada no sistema',
+                    date: entrega.data_criacao
+                },
+                {
+                    status: 'coletado',
+                    title: 'Mercadoria Coletada',
+                    description: 'Mercadoria coletada no endereço do remetente',
+                    date: entrega.status === 'coletado' || currentStatusIndex > 0 ? entrega.data_atualizacao : null
+                },
+                {
+                    status: 'em_transito',
+                    title: 'Em Trânsito',
+                    description: 'Mercadoria em transporte para o destino',
+                    date: entrega.status === 'em_transito' || currentStatusIndex > 1 ? entrega.data_atualizacao : null
+                },
+                {
+                    status: 'entregue',
+                    title: 'Entregue',
+                    description: 'Mercadoria entregue ao destinatário',
+                    date: entrega.status === 'entregue' ? entrega.data_atualizacao : null
+                }
+            ];
+            
+            timelineData.forEach((item, index) => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'timeline-item';
+                
+                if (index <= currentStatusIndex) {
+                    timelineItem.classList.add('active');
+                }
+                
+                timelineItem.innerHTML = `
+                    <div class="timeline-date">${item.date ? formatarData(item.date) : 'Aguardando'}</div>
+                    <div class="timeline-title">${item.title}</div>
+                    <div class="timeline-description">${item.description}</div>
+                `;
+                
+                timeline.appendChild(timelineItem);
+            });
+        }
+
+        // Função para formatar data
+        function formatarData(dataString) {
+            const data = new Date(dataString);
+            return data.toLocaleDateString('pt-BR') + ' às ' + data.toLocaleTimeString('pt-BR');
+        }
+
+        // Função para obter texto do status
+        function getStatusText(status) {
+            const statusMap = {
+                'pendente': 'Pendente',
+                'coletado': 'Coletado',
+                'em_transito': 'Em Trânsito',
+                'entregue': 'Entregue'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Função de logout
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userName');
+            window.location.href = 'index.html';
+        }
+
+        // Menu toggle
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('nav').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
