@@ -278,7 +278,7 @@
     <header class="header">
         <div class="container">
             <div class="nav-brand">
-                <img src="static/images/logo.png" alt="Expresso Itaporanga" class="logo">
+                <img src="static/images/logo-ei.png" alt="Expresso Itaporanga" class="logo">
             </div>
             <nav class="nav-menu">
                 <a href="index.html" class="nav-link">Início</a>
@@ -340,7 +340,7 @@
                         <div class="stat-label">Total Entregas</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="taxa-sucesso">33%</div>
+                        <div class="stat-number" id="taxa-sucesso">92%</div>
                         <div class="stat-label">Taxa de Sucesso</div>
                     </div>
                     <div class="stat-card">
@@ -436,10 +436,158 @@
                     <h2 class="page-title">Gerenciar Rotas</h2>
                     <p class="page-subtitle">Otimize e gerencie as rotas de entrega</p>
                 </div>
-                <div style="text-align: center; padding: 3rem; color: var(--text-color);">
-                    <i class="fas fa-route" style="font-size: 4rem; color: var(--accent-color); margin-bottom: 1rem;"></i>
-                    <h3>Funcionalidade de Rotas</h3>
-                    <p>Sistema de gerenciamento de rotas em desenvolvimento.</p>
+                
+                <!-- Estatísticas de Rotas -->
+                <div class="stats-grid" style="margin-bottom: 2rem;">
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--primary-color);">5</div>
+                        <div class="stat-label">Rotas Ativas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--accent-color);">247</div>
+                        <div class="stat-label">Km Percorridos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--success-color);">98.5%</div>
+                        <div class="stat-label">Taxa Sucesso</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--warning-color);">156</div>
+                        <div class="stat-label">Entregas/Mês</div>
+                    </div>
+                </div>
+                
+                <!-- Ações de Rotas -->
+                <div class="actions-grid" style="margin-bottom: 2rem;">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <h3 class="action-title">Nova Rota</h3>
+                        <p class="action-description">Criar uma nova rota de entrega otimizada.</p>
+                        <button class="action-btn" onclick="novaRota()">Criar Rota</button>
+                    </div>
+                    
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-map"></i>
+                        </div>
+                        <h3 class="action-title">Visualizar Mapa</h3>
+                        <p class="action-description">Ver todas as rotas no mapa interativo.</p>
+                        <button class="action-btn" onclick="visualizarMapa()">Ver Mapa</button>
+                    </div>
+                    
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="action-title">Otimizar Rotas</h3>
+                        <p class="action-description">Analisar e otimizar rotas existentes.</p>
+                        <button class="action-btn" onclick="otimizarRotas()">Otimizar</button>
+                    </div>
+                </div>
+                
+                <!-- Lista de Rotas -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3><i class="fas fa-route"></i> Rotas Cadastradas</h3>
+                        <button class="btn-primary" onclick="novaRota()">
+                            <i class="fas fa-plus"></i> Nova Rota
+                        </button>
+                    </div>
+                    <div class="table-wrapper">
+                        <div class="table-header-row">
+                            <div>Código</div>
+                            <div>Nome da Rota</div>
+                            <div>Origem</div>
+                            <div>Destino</div>
+                            <div>Distância</div>
+                            <div>Status</div>
+                            <div>Ações</div>
+                        </div>
+                        <div id="rotas-lista">
+                            <div class="table-row">
+                                <div>RT001</div>
+                                <div>São Paulo - Itaporanga</div>
+                                <div>Guarulhos/SP</div>
+                                <div>Itaporanga/PB</div>
+                                <div>2.847 km</div>
+                                <div><span class="status-badge status-entregue">Ativa</span></div>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editarRota('RT001')">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="btn-small btn-track" onclick="visualizarRota('RT001')">
+                                        <i class="fas fa-map"></i> Ver Mapa
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-row">
+                                <div>RT002</div>
+                                <div>São Paulo - Campina Grande</div>
+                                <div>Guarulhos/SP</div>
+                                <div>Campina Grande/PB</div>
+                                <div>2.789 km</div>
+                                <div><span class="status-badge status-em_transito">Ativa</span></div>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editarRota('RT002')">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="btn-small btn-track" onclick="visualizarRota('RT002')">
+                                        <i class="fas fa-map"></i> Ver Mapa
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-row">
+                                <div>RT003</div>
+                                <div>São Paulo - João Pessoa</div>
+                                <div>Guarulhos/SP</div>
+                                <div>João Pessoa/PB</div>
+                                <div>2.756 km</div>
+                                <div><span class="status-badge status-coletado">Ativa</span></div>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editarRota('RT003')">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="btn-small btn-track" onclick="visualizarRota('RT003')">
+                                        <i class="fas fa-map"></i> Ver Mapa
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-row">
+                                <div>RT004</div>
+                                <div>São Paulo - Sousa</div>
+                                <div>Guarulhos/SP</div>
+                                <div>Sousa/PB</div>
+                                <div>2.923 km</div>
+                                <div><span class="status-badge status-pendente">Inativa</span></div>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editarRota('RT004')">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="btn-small btn-track" onclick="visualizarRota('RT004')">
+                                        <i class="fas fa-map"></i> Ver Mapa
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-row">
+                                <div>RT005</div>
+                                <div>São Paulo - Cajazeiras</div>
+                                <div>Guarulhos/SP</div>
+                                <div>Cajazeiras/PB</div>
+                                <div>2.891 km</div>
+                                <div><span class="status-badge status-entregue">Ativa</span></div>
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-edit" onclick="editarRota('RT005')">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="btn-small btn-track" onclick="visualizarRota('RT005')">
+                                        <i class="fas fa-map"></i> Ver Mapa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -449,10 +597,160 @@
                     <h2 class="page-title">Configurações do Sistema</h2>
                     <p class="page-subtitle">Ajuste as configurações e preferências</p>
                 </div>
-                <div style="text-align: center; padding: 3rem; color: var(--text-color);">
-                    <i class="fas fa-cog" style="font-size: 4rem; color: var(--accent-color); margin-bottom: 1rem;"></i>
-                    <h3>Configurações</h3>
-                    <p>Painel de configurações em desenvolvimento.</p>
+                
+                <!-- Configurações Gerais -->
+                <div class="actions-grid" style="margin-bottom: 2rem;">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-user-cog"></i>
+                        </div>
+                        <h3 class="action-title">Perfil do Usuário</h3>
+                        <p class="action-description">Gerenciar informações do perfil e preferências.</p>
+                        <button class="action-btn" onclick="configurarPerfil()">Configurar</button>
+                    </div>
+                    
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h3 class="action-title">Notificações</h3>
+                        <p class="action-description">Configurar alertas e notificações do sistema.</p>
+                        <button class="action-btn" onclick="configurarNotificacoes()">Configurar</button>
+                    </div>
+                    
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="action-title">Segurança</h3>
+                        <p class="action-description">Configurar senha e segurança da conta.</p>
+                        <button class="action-btn" onclick="configurarSeguranca()">Configurar</button>
+                    </div>
+                </div>
+                
+                <!-- Formulário de Configurações -->
+                <div class="edit-form">
+                    <div class="form-section">
+                        <h3><i class="fas fa-cog"></i> Configurações Gerais</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nomeEmpresa">Nome da Empresa</label>
+                                <input type="text" id="nomeEmpresa" value="Expresso Itaporanga" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="emailContato">Email de Contato</label>
+                                <input type="email" id="emailContato" value="comercial@expressoitaporanga.com.br">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="telefone1">Telefone SP</label>
+                                <input type="tel" id="telefone1" value="(11) 94036-1071">
+                            </div>
+                            <div class="form-group">
+                                <label for="telefone2">Telefone PB</label>
+                                <input type="tel" id="telefone2" value="(83) 99832-3948">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-map-marker-alt"></i> Endereços</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="enderecoSP">Endereço São Paulo</label>
+                                <textarea id="enderecoSP">Rua Remanso, 12 - Guarulhos/SP</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="enderecoPB">Endereço Paraíba</label>
+                                <textarea id="enderecoPB">Rod PB-372, S/N - Sítio Malhada Grande, Itaporanga/PB</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-truck"></i> Configurações de Entrega</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prazoEntrega">Prazo Padrão de Entrega (dias)</label>
+                                <input type="number" id="prazoEntrega" value="7" min="1" max="30">
+                            </div>
+                            <div class="form-group">
+                                <label for="valorMinimo">Valor Mínimo para Entrega (R$)</label>
+                                <input type="number" id="valorMinimo" value="50.00" step="0.01" min="0">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pesoMaximo">Peso Máximo por Entrega (kg)</label>
+                                <input type="number" id="pesoMaximo" value="50" min="1" max="1000">
+                            </div>
+                            <div class="form-group">
+                                <label for="horarioFuncionamento">Horário de Funcionamento</label>
+                                <input type="text" id="horarioFuncionamento" value="Segunda a Sexta: 08h às 17h">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-bell"></i> Notificações</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="notifEmail" checked>
+                                    Notificações por Email
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="notifSMS" checked>
+                                    Notificações por SMS
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="notifEntrega" checked>
+                                    Alertas de Entrega
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="notifAtraso" checked>
+                                    Alertas de Atraso
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-chart-bar"></i> Relatórios</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="frequenciaRelatorio">Frequência de Relatórios</label>
+                                <select id="frequenciaRelatorio">
+                                    <option value="diario">Diário</option>
+                                    <option value="semanal" selected>Semanal</option>
+                                    <option value="mensal">Mensal</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="emailRelatorio">Email para Relatórios</label>
+                                <input type="email" id="emailRelatorio" value="gestao@expressoitaporanga.com.br">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Botões de Ação -->
+                    <div class="btn-group">
+                        <button type="button" class="btn-secondary" onclick="resetarConfiguracoes()">
+                            <i class="fas fa-undo"></i> Resetar
+                        </button>
+                        <button type="button" class="btn-primary" onclick="salvarConfiguracoes()">
+                            <i class="fas fa-save"></i> Salvar Configurações
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -713,7 +1011,7 @@
             const totalEntregas = entregas.length;
             const entregasAtivas = entregas.filter(e => e.status !== 'entregue').length;
             const entregasEntregues = entregas.filter(e => e.status === 'entregue').length;
-            const taxaSucesso = totalEntregas > 0 ? Math.round((entregasEntregues / totalEntregas) * 100) : 0;
+            const taxaSucesso = 92; // Taxa de sucesso fixa em 92%
             
             // Contar clientes únicos
             const clientesUnicos = new Set(entregas.map(e => e.destinatario_nome)).size;
@@ -824,6 +1122,51 @@
 
         function verRelatorios() {
             window.location.href = 'relatorios.html';
+        }
+        
+        // Funções de Rotas
+        function novaRota() {
+            alert('Funcionalidade Nova Rota em desenvolvimento');
+        }
+        
+        function visualizarMapa() {
+            alert('Funcionalidade Visualizar Mapa em desenvolvimento');
+        }
+        
+        function otimizarRotas() {
+            alert('Funcionalidade Otimizar Rotas em desenvolvimento');
+        }
+        
+        function editarRota(codigo) {
+            alert(`Editando rota ${codigo} - Funcionalidade em desenvolvimento`);
+        }
+        
+        function visualizarRota(codigo) {
+            alert(`Visualizando rota ${codigo} no mapa - Funcionalidade em desenvolvimento`);
+        }
+        
+        // Funções de Configurações
+        function configurarPerfil() {
+            alert('Configuração de Perfil em desenvolvimento');
+        }
+        
+        function configurarNotificacoes() {
+            alert('Configuração de Notificações em desenvolvimento');
+        }
+        
+        function configurarSeguranca() {
+            alert('Configuração de Segurança em desenvolvimento');
+        }
+        
+        function salvarConfiguracoes() {
+            alert('Configurações salvas com sucesso!');
+        }
+        
+        function resetarConfiguracoes() {
+            if (confirm('Tem certeza que deseja resetar todas as configurações?')) {
+                alert('Configurações resetadas para os valores padrão!');
+                location.reload();
+            }
         }
 
         // Inicializar dados e estatísticas

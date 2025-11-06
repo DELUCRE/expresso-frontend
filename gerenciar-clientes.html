@@ -255,7 +255,7 @@
     <header class="header">
         <div class="container">
             <div class="nav-brand">
-                <img src="static/images/logo-oficial.png" alt="Expresso Itaporanga" class="logo">
+                <img src="static/images/logo-ei.png" alt="Expresso Itaporanga" class="logo">
                 <span class="brand-text">Expresso Itaporanga</span>
             </div>
             
@@ -396,14 +396,41 @@
             }
         ];
 
-        // Carregar clientes do localStorage ou usar dados de exemplo
+        // Carregar clientes baseado nos dados das entregas (sincronizado com Dashboard)
         function carregarClientes() {
-            let clientes = JSON.parse(localStorage.getItem('clientes') || '[]');
-            if (clientes.length === 0) {
-                clientes = clientesExemplo;
-                localStorage.setItem('clientes', JSON.stringify(clientes));
-            }
-            return clientes;
+            const entregas = JSON.parse(localStorage.getItem('entregas_expresso') || '[]');
+            const clientesMap = new Map();
+            
+            // Gerar clientes únicos baseado nos destinatários das entregas
+            entregas.forEach(entrega => {
+                const clienteId = entrega.destinatario_nome.toLowerCase().replace(/\s+/g, '');
+                if (!clientesMap.has(clienteId)) {
+                    clientesMap.set(clienteId, {
+                        id: clientesMap.size + 1,
+                        nome: entrega.destinatario_nome,
+                        documento: `CPF: ***.***.***-**`,
+                        telefone: '(83) 9****-****',
+                        email: `${clienteId}@email.com`,
+                        endereco: entrega.destinatario_endereco,
+                        cidade: entrega.destinatario_cidade,
+                        entregas: 0,
+                        valor_total: 0,
+                        ultima_entrega: '',
+                        status: 'ativo'
+                    });
+                }
+                
+                const cliente = clientesMap.get(clienteId);
+                cliente.entregas += 1;
+                cliente.valor_total += entrega.valor_declarado;
+                
+                // Atualizar última entrega (assumindo formato dd/mm/yyyy)
+                if (!cliente.ultima_entrega || entrega.data_cadastro > cliente.ultima_entrega) {
+                    cliente.ultima_entrega = entrega.data_cadastro;
+                }
+            });
+            
+            return Array.from(clientesMap.values());
         }
 
         // Calcular estatísticas
